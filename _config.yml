@@ -1,2 +1,4 @@
 source: contents
 destination : publish
+
+highlighter : pygements
