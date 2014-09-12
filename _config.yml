@@ -1,4 +1,2 @@
-source: contents
-destination : publish
-
-highlighter : pygements
+markdown: redcarpet
+pygments: true
