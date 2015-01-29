@@ -12,32 +12,16 @@
 <body>
     <div id='playerYRGmVZStseSr'></div>
     <script type='text/javascript'>
-        var rtmpURL = 'rtmp://211.106.111.239:1935/free/mp4:'+fileName;
-        var hlsURL = 'http://211.106.111.239:1935/free/mp4:'+fileName+'/playlist.m3u8';
-        var rtspURL = 'rtsp://211.106.111.239:1935/free/mp4:'+fileName;
-
-        var srcWithRTSP = [
-            {file:rtmpURL},
-            {file:hlsURL},
-            {file:rtspURL}
-        ];
-        var srcWithoutRTSP = [
-            {file:rtmpURL},
-            {file:hlsURL}
-        ]
-
         var player;
         function playVideo(srcList_){
             player = jwplayer('playerYRGmVZStseSr').setup({
-                sources: srcList_,
+                file: 'rtsp://211.106.111.239:1935/free/mp4:'+fileName,
                 autostart:'true',
                 image: '//www.longtailvideo.com/content/images/jw-player/lWMJeVvV-876.jpg',
                 title: 'test',
                 width: '100%',
                 androidhls:true,
                 aspectratio: '16:9'
-            }).onSetupError(function(fallback, message){
-                playVideo(srcWithRTSP);
             }).onError(function(message_){
                 console.error("Player error : "+message_);
             }).onAdError(function(tag_, message_){
