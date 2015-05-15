@@ -1,0 +1,151 @@
+{
+	"resources": [
+		{"src": "/amp/amp.css", "type": "text/css"}
+	], 
+	"controls": {
+		"enabled": true
+	},
+	"fullscreen": {
+		"native": true,
+		"enabled": true
+	},
+	"playoverlay": {
+		"enabled": true
+	},
+	"branding": {
+		"logo": "/resources/images/akamai_logo1.png"
+	},
+	"captioning": {},
+	"flash": {
+		"swf": "/amp/AkamaiStandardPlayer.swf",
+		"debug": "/amp/AkamaiStandardPlayer-debug.swf",
+		"vars": {
+			"next_video_timer": 0
+		},
+		"xml": "<application><player volume='.75' dvr_enabled='1' rewind_interval='15' font_size='18' media_analytics_logging_enabled='false' enable_alternate_server_mapping='true' enable_end_user_mapping='true' set_resume_dvr_at_live='true' is_token_required='false' locale_setting='en' auto_play_list='false' auto_replay='false' mbr_starting_index='0' controls='true' caption_type='' caption_language ='en-us' hds_fragment_retry_data_gap_threshold= '20'></player><view skin='../amp/standard.assets.swf'><element id='infoOverlay' style='top: 0px; text-align: left;' /><element id='captionDisplay' initState='cookie|off' position='relative' style='bottom: 0px; windowColor:0x000000; windowOpacity:0; font:Arial; fontColor:0xffffff; fontOpacity:1; fontBGColor:0x000000; fontBGOpacity:0; edgeType:none; edgeColor:0x000000; edgeOpacity:1; scroll:popOut; fontSize:12;' settingsEnabled='true' /><element id='controls' visible='true' autoHide='5' height='25' itemMargin='5'><element id='replayBtn' /><element id='playPauseBtn' /><element id='rewindBtn' /><element id='progressBar' color='#FF0000' /><element id='loadedBar' color='#00FF00' /><element id='scrubBar' style='height: 18px;' /><element id='captionBtn' /><element id='volumeBar' color='#0000FF' /><element id='volumeBtn' /><element id='fullscreenBtn' /><element id='hdClientBtn' /><element id='logo' style='width: 205px; height: 60px; right: 15px; top: 15px; opacity: 1.0;' /><element id='streamTimeIndicator' exclude='live'><element id='streamTime' /><element id='streamDuration' /></element><element id='timeLocationIndicator' type='arrow' color='#FFFFFF' /><element id='liveIndicator' /><element id='goLiveBtn' /></element><element id='replayView' /><element id='bufferingView' mode='default' tether='false' /></view><plugins><!-- CONSULT AKAMAI REGARDING PLUG-IN MODIFICATIONS. DO NOT MODIFY WITHOUT SUPPORT FROM AKAMAI --><plugin host='osmf' type='dynamic' absolute='true' id='AkamaiAdvancedStreamingPlugin'>http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v3.6/osmf2.0/AkamaiAdvancedStreamingPlugin.swf</plugin><plugin host='osmf' type='dynamic' id='CaptioningPlugin'>../resources/plugins/CaptioningPlugin.swf</plugin><plugin host='osmf' type='dynamic' id='onCaptionInfoPlugin'>../resources/plugins/onCaptionInfoPlugin.swf</plugin><plugin host='osmf' type='static' id='OSMFCSMALoader'>com.akamai.playeranalytics.osmf.OSMFCSMALoaderInfo</plugin></plugins><recommendations><vendor id='mrss'><property key='RECOMMENDATIONS_MRSS_URL'>?http://www.foxnews.com/feeds/rss/chartbeat/most-popular-video</property></vendor><vendor id='outbrain'><property key='OUTBRAIN_BASE_URL'>http://odb.outbrain.com/utils/get</property><property key='OUTBRAIN_API_KEY'>AKAMAI2011</property><property key='OUTBRAIN_WIDGET_JS_ID'>AR_2</property></vendor></recommendations><locales /><metrics /><eventmanagementstates /></application>"
+	},
+	"mediaanalytics": {
+		"resources": [
+			{
+				"type": "text/javascript",
+				"src": "http://79423.analytics.edgesuite.net/html5/akamaihtml5-min.js"
+			}
+		],
+		"plugin": {
+			"swf": "http://79423.analytics.edgesuite.net/csma/plugin/csma.swf"
+		},
+		"config": "http://ma188-r.analytics.edgesuite.net/config/beacon-2114.xml?setVideoObject=1",
+		"dimensions": {
+			"eventName": "AMP Sample Event",
+			"title": "AMP Sample Title",
+			"playerId": "#{player.mode} Player"
+		}
+	},
+	"locales": {	
+		"en": {
+			"MSG_EMAIL_TO": "To",
+			"MSG_EMAIL_FROM": "From",
+			"MSG_EMAIL_VIDEO": "Email this video",
+			"MSG_EMAIL_MESSAGE_DEFAULT": "Check out this video from xxx",
+			"MSG_EMAIL_MESSAGE": "Message",
+			"MSG_EMAIL_ADDRESS_INVALID": "Invalid Email Address",
+			"MSG_EMAIL_MESSAGE_INVALID": "Please limit your message to 500 characters or less.",
+			"MSG_EMAIL_CHARACTERS_REMAINING_TEXT": " characters left",
+			"MSG_EMAIL_SEND_FAILURE": "Message could not be sent.",
+			"MSG_EMAIL_SEND_SUCCESS_MESSAGE": "Your email has been sent!",
+			"MSG_SHARE_VIDEO_TEXT": "Share this video...",
+			"MSG_POST_TEXT": "Post",
+			"MSG_EMBED_TEXT": "Embed",
+			"MSG_LINK_TEXT": "Link",
+			"MSG_SHARE_CONNECT_FAILURE": "Unable to connect. Please try again.",
+			"MSG_SHARE_CONTENT_DISABLED": "Share and embed are disabled.",
+			"MSG_VERSION_TEXT": "Version",
+			"MSG_BUFFERING_TEXT": "buffering",
+			"MSG_CUSTOMIZE_CLIP_POINTS": "Customize the start and end point of the video.",
+			"MSG_PAUSE": "Pause",
+			"MSG_PREVIEW": "Preview",
+			"MSG_CURRENT": "Currrent",
+			"MSG_SEEK_TO": "Seek to",
+			"MSG_LIVE": "LIVE",
+			"MSG_DEFAULT_ERROR_MESSAGE": "Sorry, we were unable to play the media you selected. Please try again, or select alternate media.",
+			"MSG_ERROR_PREFIX": "Error encountered: ",
+			"MSG_STREAM_NOT_FOUND": "Stream not found",
+			"MSG_CURRENT_WORKING_BANDWIDTH": "Current working bandwidth",
+			"MSG_CURRENT_BITRATE_PLAYING": "Current bitrate playing",
+			"MSG_MAX_BITRATE_AVAILABLE": "Max bitrate available",
+			"MSG_NOT_AVAILABLE": "Not Available",
+			"MSG_GO_LIVE": "GO LIVE",
+			"MSG_REPLAY": "Replay",
+			"MSG_NEXT_VIDEO": "Next video starts in: ",
+			"MSG_RECOMMENDED": "Recommended",
+			"MSG_VIEW_ALL": "View all ",
+			"MSG_VIDEO": " videos",
+			"MSG_CC": "CC",
+			"MSG_CC_TITLE": "Captions",
+			"MSG_CC_LANGUAGE": "Track :",
+			"MSG_CC_PRESETS": "Presets :",
+			"MSG_CC_FONT": "Font :",
+			"MSG_CC_EDGE": "Edge :",
+			"MSG_CC_SIZE": "Size :",
+			"MSG_CC_SCROLL": "Scroll :",
+			"MSG_CC_COLOR": "Color :",
+			"MSG_CC_BACKGROUND": "Background :",
+			"MSG_CC_EDGE": "Edge :",
+			"MSG_CC_WINDOW": "Window :",
+			"MSG_CC_OPACITY": "Opacity :",
+			"MSG_CC_SHOW_ADVANCED": "Show Advanced Settings",
+			"MSG_CC_HIDE_ADVANCED": "Hide Advanced Settings",
+			"MSG_CC_RESET": "Default",
+			"MSG_CC_CANCEL": "Cancel",
+			"MSG_CC_APPLY": "Apply",
+			"MSG_EN": "English",
+			"MSG_ES": "Spanish",
+			"MSG_DE": "German",
+			"MSG_FR": "French",
+			"MSG_IT": "Italian",
+			"MSG_RU": "Russian",
+			"MSG_CHROMECAST_MESSAGE": "Video playing on another screen"
+		},	
+		"es": {
+			"MSG_EMAIL_TO": "a",
+			"MSG_EMAIL_FROM": "de",
+			"MSG_EMAIL_VIDEO": "Enviar este vídeo",
+			"MSG_EMAIL_MESSAGE_DEFAULT": "Echa un vistazo a este video de xxx",
+			"MSG_EMAIL_MESSAGE": "mensaje",
+			"MSG_EMAIL_ADDRESS_INVALID": "Dirección de correo electrónico no válida",
+			"MSG_EMAIL_MESSAGE_INVALID": "Por favor limite su mensaje a 500 caracteres o menos.",
+			"MSG_EMAIL_CHARACTERS_REMAINING_TEXT": "personajes de la izquierda",
+			"MSG_EMAIL_SEND_FAILURE": "El mensaje no pudo ser enviado.",
+			"MSG_EMAIL_SEND_SUCCESS_MESSAGE": "Tu email ha sido enviado!",
+			"MSG_SHARE_VIDEO_TEXT": "Comparte este vídeo...",
+			"MSG_POST_TEXT": "enviar",
+			"MSG_EMBED_TEXT": "incrustar",
+			"MSG_LINK_TEXT": "enlace",
+			"MSG_SHARE_CONNECT_FAILURE": "No se puede conectar. Por favor, inténtelo de nuevo.",
+			"MSG_SHARE_CONTENT_DISABLED": "Compartir e incrustar están desactivados.",
+			"MSG_VERSION_TEXT": "versión",
+			"MSG_BUFFERING_TEXT": "el almacenamiento en búfer",
+			"MSG_CUSTOMIZE_CLIP_POINTS": "Personalizar el inicio y el punto final del video.",
+			"MSG_PAUSE": "romper",
+			"MSG_PREVIEW": "vista previa",
+			"MSG_CURRENT": "corriente",
+			"MSG_SEEK_TO": "Tratar de",
+			"MSG_LIVE": "EN VIVO",
+			"MSG_DEFAULT_ERROR_MESSAGE": "Lo sentimos, no hemos podido jugar los medios de comunicación seleccionados. Por favor, inténtelo de nuevo, o seleccionar los medios de comunicación alternativos.",
+			"MSG_ERROR_PREFIX": "Se produjo un error: ",
+			"MSG_STREAM_NOT_FOUND": "Stream que no se encuentra",
+			"MSG_CURRENT_WORKING_BANDWIDTH": "Ancho de banda actual de trabajo",
+			"MSG_CURRENT_BITRATE_PLAYING": "Tasa de bits de reproducción actual",
+			"MSG_MAX_BITRATE_AVAILABLE": "Tasa de bits máxima disponible",
+			"MSG_NOT_AVAILABLE": "No está disponible",
+			"MSG_GO_LIVE": "IR A VIVIR",
+			"MSG_REPLAY": "Repetir",
+			"MSG_NEXT_VIDEO": "El próximo video comienza en: ",
+			"MSG_RECOMMENDED": "Recomendado",
+			"MSG_VIEW_ALL": "Ver todos ",
+			"MSG_VIDEO": " vídeos",
+			"MSG_CC": "CC",
+			"MSG_CHROMECAST_MESSAGE": "Video playing on another screen"
+		}
+	}
+}
