@@ -28,7 +28,7 @@
 </table>
 <table width="600" border="1">    
     <tr>
-        <td width="100%" height="300"><div id='player2' height="300"></div></td>
+        <td width="100%" height="400"><div id='player2' height="400"></div></td>
     </tr>
     <tr>
         <td>Akamai HLS</td>
@@ -36,6 +36,7 @@
 </table>
     <script type='text/javascript'>
         var hlsURL = 'http://lezhinvideo-vh.akamaihd.net/i/sample/big_buck_bunny_1080p_subtitle_,200k,400k,600k,800k,1000k,1500k,2500k,4000k,.mp4.csmil/master.m3u8';
+        var hdsURL = 'http://lezhinvideo-vh.akamaihd.net/z/sample/big_buck_bunny_1080p_subtitle_,200k,400k,600k,800k,1000k,1500k,2500k,4000k,.mp4.csmil/manifest.f4m';
         function playVideo(){
             playJW();
             playAkamai();
@@ -77,11 +78,16 @@
                     source : [{
                         src : hlsURL,
                         type : "application/x-mpegURL"
+                    },{
+                        src : hdsURL,
+                        type : "video/f4m"
                     }]
                 }
             };
             
-            amp = akamai.amp.AMP.create("player2", config);
+            akamai.amp.AMP.loadDefaults("samples.json", function () {
+                amp = akamai.amp.AMP.create("player2", config);
+            });
         }
     </script>
 </body>￼
