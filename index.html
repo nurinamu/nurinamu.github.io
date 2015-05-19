@@ -8,46 +8,42 @@
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 </head>
 <body onload="playVideo()">
-<table width="600" border="1">
+<table width="1200" border="1">     
     <tr>
-        <td>
-            <video controls="" src="http://lezhinvideo-vh.akamaihd.net/i/sample/big_buck_bunny_1080p_subtitle_,200k,400k,600k,800k,1000k,1500k,2500k,4000k,.mp4.csmil/master.m3u8" autoplay="true" width="100%"></video>
-        </td>
-    </tr>
-    <tr>
-        <td>HTML5 Video Tag</td>
-    </tr>
-</table>
-<table width="600" border="1">     
-    <tr>
-        <td width="100%"><div id='player1'></div></td>
+        <td width="50%"><div id='player1'></div></td>
+        <td width="50%"><div id='player3'></div></td>
     </tr>
     <tr>
         <td>JW Player HLS</td>
+        <td>JW Player HLS w/SSL</td>
     </tr>
 </table>
-<table width="600" border="1">    
+<table width="1200" border="1">    
     <tr>
-        <td width="100%" height="400"><div id='player2' height="400"></div></td>
+        <td width="50%" height="400"><div id='player2' height="400"></div></td>
+        <td width="50%" height="400"><div id='player4' height="400"></div></td>
     </tr>
     <tr>
         <td>Akamai HLS</td>
+        <td>Akamai HLS w/SSL</td>
     </tr>
 </table>
     <script type='text/javascript'>
 
-        var akamaiURL = 'http://lezhinvideo-vh.akamaihd.net'
+        var akamaiURL = '://lezhinvideo-vh.akamaihd.net'
         var mediaURL = '/test/delivery/08/28/0828ece3-6beb-4da6-844c-fd5ac061693f/150302_Lezhin_Choin_,400k,2500k,800k,200k,1500k,1000k,600k,4000k,.mp4';
 
 
-        var hlsURL = akamaiURL+'/i'+mediaURL+'.csmil/master.m3u8';
-        var hdsURL = akamaiURL+'/z'+mediaURL+'.csmil/manifest.f4m';
+        var hlsURL = 'http'+akamaiURL+'/i'+mediaURL+'.csmil/master.m3u8';
+        var secureHlsURL = 'https'+akamaiURL+'/i'+mediaURL+'.csmil/master.m3u8';
+        var hdsURL = 'http'+akamaiURL+'/z'+mediaURL+'.csmil/manifest.f4m';
+        var secureHdsURL = 'https'+akamaiURL+'/z'+mediaURL+'.csmil/manifest.f4m';
 
         console.log(hlsURL);
 
         function playVideo(){
-            playJW();
             playAkamai();
+            playJW();
         }
 
         function playJW(){
@@ -72,9 +68,25 @@
             }).onBeforePlay(function(){
                 
             });
+
+            var player2 = jwplayer('player3').setup({
+                file: secureHlsURL,
+                autostart:'true',
+                title: 'test',
+                width: '100%',
+                androidhls:true,
+                primary:'html5',
+                aspectratio: '16:9',
+                captions: {
+                    color: '#FFFFFF',
+                    edgeStyle : 'dropshadow',
+                    fontSize: 12,
+                    backgroundOpacity:0
+                }
+            })
         }
 
-        var amp;
+        var amp, amp2;
 
         function playAkamai() {
             var config = {
@@ -94,6 +106,26 @@
             
             akamai.amp.AMP.loadDefaults("samples.json", function () {
                 amp = akamai.amp.AMP.create("player2", config);
+            });
+
+
+            var secureConfig = {
+                autoplay : true,
+                media : {
+                    title : "VOD Sample",
+                    poster : '/resources/images/hd_world.jpg',
+                    source : [{
+                        src : secureHlsURL,
+                        type : "application/x-mpegURL"
+                    },{
+                        src : secureHdsURL,
+                        type : "video/f4m"
+                    }]
+                }
+            };
+            
+            akamai.amp.AMP.loadDefaults("samples.json", function () {
+                amp2 = akamai.amp.AMP.create("player4", secureConfig);
             });
         }
     </script>
