@@ -51,36 +51,25 @@
         }
 
         function playJW(){
-            var player = jwplayer('player1').setup({
-                file: hlsURL,
-                autostart:'true',
-                title: 'test',
-                width: '100%',
-                androidhls:true,
-                primary:'html5',
-                aspectratio: '16:9'
-            }).onError(function(message_){
-                console.error("Player error : "+message_);
-            }).onAdError(function(tag_, message_){
-                console.error("AD error["+tag_+"] - "+message_);
-            }).onBeforePlay(function(){
-                
-            });
+            // var player = jwplayer('player1').setup({
+            //     file: hlsURL,
+            //     autostart:'true',
+            //     width: '100%',
+            //     androidhls:true,
+            //     aspectratio: '16:9'
+            // }).onError(function(message_){
+            //     console.error("Player error : "+message_);
+            // });
 
             var player2 = jwplayer('player3').setup({
                 file: secureHlsURL,
                 autostart:'true',
-                title: 'test',
                 width: '100%',
                 androidhls:true,
-                primary:'html5',
-                aspectratio: '16:9'
+                aspectratio: '16:9',
+                flashplayer: 'https://ssl.p.jwpcdn.com/6/12/jwplayer.flash.swf'
             }).onError(function(message_){
                 console.error("Player error : "+message_);
-            }).onAdError(function(tag_, message_){
-                console.error("AD error["+tag_+"] - "+message_);
-            }).onBeforePlay(function(){
-                
             });
         }
 
