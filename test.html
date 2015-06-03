@@ -1,25 +1,19 @@
 <html>
 
+<head>
+<script src="https://jwpsrv.com/library/CWW4cglsEeWAyRJtO5t17w.js"></script>
+</head>
     <body>
 
-        <input type="file" id="testFile">
-    <input type="button" id="testBtn">
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script>
-        $('#testBtn').click(function(){
-            var file = document.getElementById('testFile').files[0];
-            $.ajax({
-                url:"http://localhost:8000/v2/media",
-               type:"POST",
-                data:file,
-                success:function(resp){
-                    console.log(resp);
-                }
-            });
-        });
-
-    </script>
+        <div id='playerswQsYvSdZJyH'></div>
+<script type='text/javascript'>
+    jwplayer('playerswQsYvSdZJyH').setup({
+        file: 'https://lezhinvideo-vh.akamaihd-staging.net/i/test/delivery/06/96/069673ae-1589-42ac-b095-0aed07e9714a/04_test_2997i_2CH_,2500k,400k,600k,200k,1000k,4000k,800k,1500k,.mp4.csmil/master.m3u8',
+        width: '100%',
+        aspectratio: '16:9',
+        autostart: 'true'
+    });
+</script>
 
     </body>
 </html>
