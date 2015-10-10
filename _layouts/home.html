@@ -2,23 +2,25 @@
 <html>
 <head>
     <title>Nurinamu's Home page</title>
-    <style>
-    	body{
-    		background-color: #000;
-    		color: #FFF;
-    	}
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{baseurl}}/assets/css/style.css" />
 </head>
 <body>
-<div>
-	<img src="{{baseurl}}/img/home_header.png" />
-</div>
-CATEGORIES
-<div>
-	{% for category in site.categories %}
-    {{ category }}
-	{% endfor %}
-</div>
-{{page.content}}
+{% include header.html %}
+
+{% include nav.html %}
+
+<table width="100%">
+<tr>
+	<td align="center">
+		<div class="page_content">
+			{{content}}
+		</div>
+	</td>
+</tr>	
+</table>
+
+
 </body>
+
+{% include footer.html %}
 </html>

@@ -1,0 +1,63 @@
+body{
+	background-color: #000;
+	color: #FFF;
+}	
+
+footer{
+	position : fixed;
+	bottom : 0px;
+	color : #CCC;
+	font-size : 10px;
+	margin-bottom : 15;
+}
+
+footer a{
+	color : #CCC;
+	text-decoration: none;
+}
+
+footer a:hover{
+	color : #FFF;
+	text-decoration: underline;
+}
+
+.center-align{
+	width : 100%;
+	text-align: center;
+}
+
+.nav_item{
+	width : 100px;
+	color : #FFF;
+}
+
+.nav_item a{
+	color : #FFF;
+	text-decoration: none;
+}
+
+.nav_item a:hover{
+	color : yellow;
+	text-decoration: underline;
+}
+
+.page_content{
+	text-align: left;
+	width : 600px;
+	margin-top : 10px;
+	margin-bottom : 10px;
+}
+
+.post_item {
+	font-size : 25px;
+}
+
+.post_item a{
+	color : #FFF;
+	text-decoration: none;
+}
+
+.post_item a:hover{
+	color : yellow;
+	text-decoration: underline;
+}
