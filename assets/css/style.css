@@ -1,24 +1,39 @@
 body{
 	background-color: #000;
-	color: #FFF;
+	color: #AAA;
 }	
 
-footer{
-	position : absolute;
-	bottom : 0px;
+h3{
+	color: #CCC;
+}
+
+code{
+	color : #009933;
+}
+
+pre {
+	padding : 10px;
+	background-color: #333;
+}
+
+.footer{
 	color : #CCC;
 	font-size : 10px;
 	margin-bottom : 15;
 }
 
-footer a{
+.footer a{
 	color : #CCC;
 	text-decoration: none;
 }
 
-footer a:hover{
+.footer a:hover{
 	color : #FFF;
 	text-decoration: underline;
+}
+
+a{
+	color : orange;
 }
 
 .center-align{
@@ -44,7 +59,6 @@ footer a:hover{
 .page_content{
 	text-align: left;
 	width : 600px;
-	margin-top : 10px;
 	margin-bottom : 10px;
 }
 
@@ -70,4 +84,17 @@ footer a:hover{
 .post_item a:hover{
 	color : yellow;
 	text-decoration: underline;
+}
+
+.page_title {
+	font-size : 40px;
+	text-align : left;
+	width : 600px;
+	margin-top : 10px;
+	margin-bottom : 10px;
+}
+
+.page_meta{
+	font-size : 10px;
+	color : #CCC;
 }

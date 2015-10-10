@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{page.title}}</title>
+    <title>Nurinamu's Home page - {{page.title}}</title>
+    <link rel="stylesheet" type="text/css" href="{{baseurl}}/assets/css/style.css" />
 </head>
 <body>
-<h1>Welcome to Nurinamu's Page!</h1>
-<ul>
-    <li><a href="http://nurinamu.tistory.com" target="_blank">Private Blog</a></li>
-    <li><a href="http://plus.google.com/+nurinamu" target="_blank">Google+</a></li>
-    <li><a href="http://facebook.com/nurinamu" target="_blank">Facebook</a></li>
-</ul>
+{% include header.html %}
 
-{{ content }}
+{% include nav.html %}
 
+<table width="100%">
+<tr>
+	<td align="center">
+		<div class="page_title">
+			{{page.title}}			
+			<span class="post_date">
+			-
+			{{page.date | date: '%Y %B %d'}}</span>
+		</div>
+		<div class="page_content">
+			{{content}}
+		</div>
+	</td>
+</tr>	
+</table>
+
+{% include footer.html %}
 </body>
 </html>
