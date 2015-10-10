@@ -4,7 +4,7 @@ body{
 }	
 
 footer{
-	position : fixed;
+	position : absolute;
 	bottom : 0px;
 	color : #CCC;
 	font-size : 10px;
@@ -55,6 +55,16 @@ footer a:hover{
 .post_item a{
 	color : #FFF;
 	text-decoration: none;
+}
+
+.post_category {
+	color : #CCC;
+	font-size : 10px;
+}
+
+.post_date {
+	color : #CCC;
+	font-size : 10px;
 }
 
 .post_item a:hover{
