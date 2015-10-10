@@ -58,8 +58,9 @@ a{
 
 .page_content{
 	text-align: left;
-	width : 600px;
+	width : 700px;
 	margin-bottom : 10px;
+	line-height: 25px;
 }
 
 .post_item {
@@ -99,7 +100,7 @@ a{
 	font-size : 40px;
 	line-height: 20px;
 	text-align : left;
-	width : 600px;
+	width : 700px;
 	margin-top : 10px;
 	margin-bottom : 10px;
 }
