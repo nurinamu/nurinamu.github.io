@@ -47,12 +47,12 @@ a{
 }
 
 .nav_item a{
-	color : #FFF;
+	color : #DDD;
 	text-decoration: none;
 }
 
 .nav_item a:hover{
-	color : yellow;
+	color : #FAF75F;
 	text-decoration: underline;
 }
 
@@ -86,8 +86,18 @@ a{
 	text-decoration: underline;
 }
 
+.post_end{
+	font-size : 10px;
+	color : #FFCC66;
+	text-align: center;
+	margin-bottom : 20px;
+	padding-bottom: 20px;
+}
+
 .page_title {
+	color : #FFF;
 	font-size : 40px;
+	line-height: 20px;
 	text-align : left;
 	width : 600px;
 	margin-top : 10px;

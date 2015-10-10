@@ -1,0 +1,13 @@
+<tr>
+		<td class="post_item">
+			<a href={{ post.url }}>{{ post.title }}</a>
+			<span class="post_category">
+			-
+				<a href="{{baseurl}}/{{post.categories}}">{{post.categories}}</a>
+			</span>
+			
+			<span class="post_date">
+			-
+			{{post.date | date: '%Y %B %d'}}</span>
+		</td>
+	</tr>
