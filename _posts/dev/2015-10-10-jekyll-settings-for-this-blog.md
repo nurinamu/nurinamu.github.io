@@ -10,8 +10,8 @@ tags : jekyll
 
 - Front 기술들을 적용해볼 공간이 필요.
 - 개발자 스러움을 좀 더.
-- 꽁짜
-- 무제한 공간
+- 꽁짜.
+- 무제한 공간.
 
 그래서 결정한 것이 바로 [Jekyll@Github](http://jekyllrb.com/docs/github-pages/) 이다.
 
@@ -29,16 +29,16 @@ gem 'github-pages'
 ```
 
 - 이제 `index.html`에 내용을 작성하고 shell에서 `bundle exec jekyll serve` 를 실행한다.
-- `localhost:4000`를 Browser로 열면 자신이 입력한 내용이 표시되는 것을 확인할 수 있습니다.
-- 이것을 이제 remote의 `master`로 push를 하게되면 `http://{id}.github.io` 에서 확인이 가능합니다. 'gh-pages'로 따로 올리지 않아도 자동으로 static 페이지가 빌드되어 나타나게 됩니다. 이때 간혹 빌드가 늦어져서 반영에 시간이 걸릴 때도 있습니다.
-- 그리고 `nurinamu.com` 같은 자신의 custom domain으로 페이지를 연결하고 싶을 때는 project 최상단 위치에 `CNAME`이란 파일을 생성하고 아래처럼 연결할 주소 정보를 입력합니다.
+- `localhost:4000`를 Browser로 열면 자신이 입력한 내용이 표시되는 것을 확인할 수 있다.
+- 이것을 이제 remote의 `master`로 push를 하게되면 `http://{id}.github.io` 에서 확인이 가능하다. 'gh-pages'로 따로 올리지 않아도 자동으로 static 페이지가 빌드되어 나타나게 된다. 이때 간혹 빌드가 늦어져서 반영에 시간이 걸릴 때도 있다.
+- 그리고 `nurinamu.com` 같은 자신의 custom domain으로 페이지를 연결하고 싶을 때는 project 최상단 위치에 `CNAME`파일을 생성하고 아래처럼 연결할 주소 정보를 입력한다.
 
 ```
 www.nurinamu.com
 ```
 
-- 그럼 이제 설치가 완료되었으니 Jekyll syntax에 따라 _layouts, _includes, _posts를 생성하고 작성합니다.
-- 각각에 대한 내용은 또 다른 포스트로 설명하겠습니다.
+- 그럼 이제 설치가 완료되었으니 Jekyll syntax에 따라 _layouts, _includes, _posts를 생성하고 작성한다.
+- 각각에 대한 내용은 또 다른 포스트로 설명하기로.
 
 ### 변경사항
  - 블로그 오픈 (2015/10/9)
