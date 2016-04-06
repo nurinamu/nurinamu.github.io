@@ -1,8 +1,4 @@
 permalink : pretty
-markdown :    redcarpet
 highlighter : rouge
 lsi :         false
 excerpt_separator : "\n\n"
-
-kramdown :
-  input : GFM
