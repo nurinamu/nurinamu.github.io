@@ -49,82 +49,60 @@ _그림 1: 이벤츄얼 컨시스턴시에서의 복제 컨셉 묘사_
 
 _Figure 2: 스트롱 컨시스턴시에서의 복제 컨셉 묘사_
 
-## 스트롱 컨시스턴시와 이벤츄얼 컨시스턴시 균형 맞추기
+## 스트롱 컨시스턴시(Strong Consistency)와 이벤츄얼 컨시스턴시(Eventual Consistency) 균형 맞추기
 
 최근 비관계형 데이터베이스가 높은 확장성과 고가용성 성능을 필요로하는 웹어플리케이션에서, 특히 인기를 얻고 있습니다. 비관계형 데이터베이스는 개발자들에게 각 어플리케이션에서 스트롱 컨시스턴시와 이벤츄얼 컨시스턴시 사이에서 최적의 균형을 선택하게 합니다. 이것은 개발자들에게 두 세계의 장점을 결합할 수 있도록 합니다. 예를 들어, "현재 접속한 친구를 알아내는 것", "얼마나 많은 사용자들이 여러분의 글에 +1을 했는지 알아내는 것"과 같은 정보는 스트롱 컨시스턴시를 사요할 필요가 없습니다. 이러한 경우에는 이벤츄얼 컨시스턴시를 통해 확장성과 성능을 얻을 수 있습니다. 스트롱 컨시스턴시를 사용해야하는 경우는 "결제과정이 종료된 사용자인지 아닌지", "게임 플레이어가 전투세션에서 획득한 점수가 몇인지" 등과 같은 정보를 포함한 경우 입니다.
 
-To generalize the examples just given, use cases with very large numbers of entities often suggest that eventual consistency is the best model. If there are very large number of results in a query, then the user experience may not be affected by the inclusion or exclusion of specific entities. On the other hand, use cases with a small number of entities and a narrow context suggest that strong consistency is required. The user experience will be affected because the context will make users aware of which entities should be included or excluded.
+아주 많은 엔티티들을 가진 사례를 일반적으로 생각해보면, 이벤츄얼 컨시스턴시가 최고의 모델로 자주 언급이됩니다. 하나의 질의문 안에 아주 많은 결과들이 들어있더라도, 이때 사용자는 특정 엔티티들의 포함 또는 제외에 의한 영향을 느끼지 못할 것입니다. 한편, 소수의 엔티티들과 작은 컨텍스트의 사례에서는 스트롱 컨시스턴시가 필요하다고 생각되어집니다. 컨텍스트가 엔티티들이 포함되거나 제외되는 것을 사용자가 인식하도록 할 것이기 때문에, 사용자들은 영향을 느끼게 될 것입니다.
 
-For these reasons, it is important for developers to understand the non-relational characteristics of Google Cloud Datastore. The following sections discuss how eventual consistency and strong consistency models can be combined to build a scalable, highly available, and highly performing application. In doing so, consistency requirements for a positive user experience will still be satisfied.
+이러한 이유들 때문에, 개발자들이 구글 클라우드 데이터스토어의 비관계형 특성들을 이해하는 것은 매우 중요합니다. 뒤의 세션들에서는 이벤츄얼 컨시스턴시와 스트롱 컨시스턴시 모델들을 확장가능하고 고가용성, 고성능 어플리케이션을 만들때 어떻게 섞어 사용할 지에 대하여 이야기합니다. 이를 통해, 긍정적인 사용자 경험을 위한 컨시스턴시 요구사항들을 만족시킬 수 있을 것입니다.
 
-Eventual Consistency in Google Cloud Datastore
+## 구글 클라우드 데이터스토어에서의 이벤츄얼 컨시스턴시(Eventual Consistency)
 
-The correct API must be selected when a strongly consistent view of data is required. The different varieties of Google Cloud Datastore query APIs and their corresponding consistency models are shown in Table 1.
+데이터에 대한 강력한 일관성이 필요한 상황에서는 반드시 그에 맞는 API를 선택해야합니다. 다양한 종류의 구글 클라우드 데이터스토어 질의 API들과 그에 해당하는 컨시스턴시가 <표 1>에 정리되어 있습니다.
 
-Google Cloud Datastore API
+Google Cloud Datastore API | Read of entity value | Read of index
+---------------------------|----------------------|------------------
+[Global Query](https://cloud.google.com/appengine/docs/java/datastore/queries) | Eventual consistency | Eventual consistency
+[Keys-only Global Query](https://cloud.google.com/appengine/docs/java/datastore/queries#Java_Keys_only_queries) | N/A | Eventual consistency
+[Ancestor Query](https://cloud.google.com/appengine/docs/java/datastore/queries#Java_Ancestor_queries) | Strong consistency | Strong consistency
+[Lookup by key](https://cloud.google.com/appengine/docs/java/datastore/entities#Java_Retrieving_an_entity) (get()) | Strong consistency | N/A
 
-Read of entity value
+_표 1: 구글 클라우드 데이터스토어의 질의호출들과 그에 해당하는 컨시스턴시 동작들_
 
-Read of index
+구글 클라우드 데이터스토어에서 엔세스터 없는 쿼리들은 글로벌 쿼리문(Global Query)으로 알려져있고 이벤츄얼 컨시스턴시로 동작하도록 디자인되어있습니다. 글로벌 쿼리문은 스트롱 컨시스턴시를 보장하지 않습니다. keys-only 글로벌 쿼리는 쿼리에 해당하는 엔티티들의 속성값들을 포함하는 것이 아니라 키들만(key-only) 반환하는 쿼리입니다. 엔세스터 쿼리(Ancestor Query)는 엔세스터 엔티티를 기반한 쿼리를 말합니다. 뒤에서 각 컨시스턴시 동작들에 대하여 더 자세히 다룹니다.
 
-Global Query
+## 엔티티(Entity)를 읽는 시점의 이벤츄얼 컨시스턴시(Eventual Consistency)
 
-Eventual consistency
+엔세스터가 빠진 쿼리에서는 수정된 엔티티가 쿼리 실행 시점에 바로 보여지지 않을 수 있습니다. 엔티티들을 읽을 시점의 이벤츄얼 컨시스턴시 영향을 이해하기위해, Score 속성을 가진 Player 엔티티가 하나 있는 시나리오를 생각해 봅시다. Score는 초기 값으로 100을 가졌다고 합시다. 얼마후 Score가 200으로 수정되었습니다. 만약 글로벌 쿼리가 실행이 되었고 이 결과에 위의 Player 엔티티가 포함되어있다면, 반환된 엔티티의 Score 값이 수정 전의 100일 가능성이 있습니다.
 
-Eventual consistency
+이 동작은 구글 클라우드 데이터스토어 서버간의 복제로 인해 발생합니다. 복제는 구글 클라우드 데이터스토어 기반 기술들인 Bigtable, Megastore에 의해서 관리됩니다([추가자료](#Addtional Resoruces)에 Bigtable과 Megastore 관련 자세한 정보가 있습니다). 복제본들의 과반이상이 수정요청을 인식될 때까지 동기적으로 대기하는  [Paxos](https://en.wikipedia.org/wiki/Paxos_(computer_science)) 알고리즘으로 복제는 실행됩니다. 복제본 엔티티는 변경 요청으로부터 일정 시간뒤에 데이터에 반영됩니다. 이 시간은 일반적으로 작지만, 실제 길이에 대해 어떤 보장도 되지 않습니다. 변경이 완료되기전에 요청된 쿼리는 아마도 변경전 데이터를 읽어갈 것입니다.
 
-Keys-only Global Query
+대부분의 경우에, 모든 복제본으로의 변경사항 전달은 매우 빠를 것 입니다. 하지만 몇몇 요소들이 함께 섞여 일관성 확보를 위한 시간이 증가할 수도 있습니다. 이러한 요소들에는  많은 서버들을 가진 데이터센터 전체가 데이터센터간 교체 상항들도 포함됩니다. 이러한 요소들의 다양함 때문에, 완벽한 일관성 수립을 위한 특정 시간을 보장하는 것은 불가능합니다.
 
-N/A
+최종값을 반환하는 쿼리를 위한 필요 시간은 일반적으로 매우 짧습니다. 그러나 드물게  복제 대기 시간이 증가되는 경우, 그 시간은 더 길어질 수 있습니다. 구글 클라우드 데이터스토어를 사용하는 어플리케이션들은 이러한 상황들이 잘 처리될 수 있도록 글로벌 쿼리 디자인을 신중히 해야합니다.
 
-Eventual consistency
+엔티티를 읽을 때의 이벤츄얼 컨시스턴시는 keys-only 쿼리, 엔세스터 쿼리, (get() 메소드를 이용한는) key를 이용한 쿼리를 통해 피할 수 있습니다. 뒤에서 이런 다른 형태의 쿼리들에 대하여 알아봅니다.
 
-Ancestor Query
+## 인덱스를 읽을 대의 이벤츄얼 컨시스턴시(Eventual Consistency)
 
-Strong consistency
+글로벌 쿼리가 실행될때 아마도 인덱스는 아직 변경되지 않았을 것입니다. 이 말인 즉슨 반환된 엔티티들의 최종 변경값은 읽을 수 있더라도, 반환된 "엔티티 목록" 결과는 아마도 이전 인덱스 값에 의해 만들어진 것일 수 있습니다.
 
-Strong consistency
+인덱스를 일을때의 이벤츄얼 컨시스턴시의 영향을 이해하기 위해, Player라는 새 엔티티 하나가 구글 클라우드 데이터 스토어에 삽입되는 시나리오를 상상해봅시다. Player 엔티티는 Score란 속성을 가지고 있고 초기값은 300입니다. 삽입 후 바로, Score가 0보다 큰 모든 엔티티들을 반환하는 keys-only 쿼리를 실행한 다고 합시다. 당연히 방금 삽입한 Player 엔티티가 반환될 것이라고 기대할 것 입니다. 하지만 기대와는 달리 Player 엔티티가 결과에 포함되지 않았다는 것을 알 수 있을 겁니다. 이 상황은 쿼리하는 시점에 Score 인덱스테이블이 새로 삽입된 값을 반영하지 못했을 때 발생할 수 있습니다.
 
-Lookup by key (get())
+구글 클라우드 데이터스토어의 모든 쿼리들은 인덱스 테이블을 통해 실행된다는 점을 기억해야합니다. 그리고 아직도 인덱스 테이블의 변경은 비동기로 처리되고 있습니다. 특히 모든 엔티티의 수정은 두 단계로 구성되어 있습니다. 실행하는 단계인 첫번째 단계에서는 트랜젝션(Transaction) 기록을 작성하는 것이 수행됩니다. 두번째 단계에서는 데이터가 쓰여지고 인덱스들이 변경됩니다. 만약 첫번째 단계가 성공햇다면, 데이터 작성단계가 즉시 실행되지는 않더라도 성공할 것을 보장받게 됩니다. 만약 인덱스들이 변경되기 전에 엔티티를 조회하면 변경되기 이전의 값을 보게 될 것 입니다.
 
-Strong consistency
+두 단계의 처리 과정 때문에 글로벌 쿼리에서 변경된 값이 보여지기 전까지 시간 딜레이가 생기게 됩니다. 이러한 엔티티 값의 이벤츄얼 컨시스턴시에 의한 시간 딜레이는 일반적으로 작지만 (심지어 몇분 또는 예외적 상황에서 그 이상으로) 길어질 수 도 있습니다.
 
-N/A
+다음과 같은 변경들 뒤에서도 동일한 상황이 발생할 수 있습니다. 예를 들어 이미 존재하는 Player 엔티티의 Score를 0으로 변경하고, 바로 동일한(Score가 0보다 큰 엔티트를 반환하는) 쿼리를 실행했다고 합시다. Score가 0으로 변경되었기 때문에 아마도 엔티티가 포함되지 않을 거라고 기대하지만 비동기 인덱스 수정 동작 때문에 여전히 포함되어 있을 것입니다.
 
-Table 1: Google Cloud Datastore queries/get calls and possible consistency behaviors
-Google Cloud Datastore queries without an ancestor are known as global queries and are designed to work with an eventual consistency model. This does not guarantee strong consistency. A keys-only global query is a global query that returns only the keys of entities matching the query, not the attribute values of the entities. An ancestor query scopes the query based on an ancestor entity. The following sections cover each consistency behavior in more detail.
+인덱스를 읽을 때의 이벤츄얼 컨시스턴시를 피하기 위한 방법으로는 엔세스터 쿼리를 사용하거나 key로 찾는 방법 뿐입니다. keys-only 쿼리는 이 동작을 피할 수 없습니다.
 
-Eventual Consistency when Reading Entity Values
+## 엔티티와 인덱스를 읽을 때의 스트롱 컨시스턴시(Strong Consistency)
 
-With the exception of ancestor queries, an updated entity value may not be immediately visible when executing a query. To understand the impact of eventual consistency when reading entity values, consider a scenario where an entity, Player, has a property, Score. Consider, for example, that the initial Score has a value of 100. After some time, the Score value is updated to 200. If a global query is executed and includes the same Player entity in the result, it is possible that the value of the property Score of the returned entity might appear unchanged, at 100.
+구글 클라우드 데이터스토어에서는 엔티티와 인덱스를 위한 강력한 일관성을 보장하는 방법으로는 (1) key를 이용해서 찾는 방법과 (2) 엔세스터 쿼리, 오직 이 두가지 API만을 제공합니다. 만약 어플리케이션 로직이 스트롱 컨시스턴시를 요구한다면 개발자는 반드시 이 방법중 하나를 사용해 구글 클라우드 데이터스토어의 엔티티들을 읽어야 합니다.
 
-This behavior is caused by the replication between Google Cloud Datastore servers. Replication is managed by Bigtable and Megastore, the underlying technologies for Google Cloud Datastore (see Additional Resources for more on details Bigtable and Megastore). The replication is executed with the Paxos algorithm, which synchronously waits until a majority of the replicas have acknowledged the update request. The replica is updated with data from the request after a period of time. This time period is usually small, but there is no guarantee on its actual length. A query may read the stale data if it is executed before the update finishes.
-
-In many cases, the update will have reached all the replicas very quickly. However, there are several factors that may, when compounded together, increase the time to achieve consistency. These factors include any datacenter-wide incidents that involve switching over a large number of servers between datacenters. Given the variation of these factors, it is impossible to provide any definitive time requirements for establishing full consistency.
-
-The time required for a query to return the latest value is usually very short. However, in rare situations when the replication latency increases, the time can be much longer. Applications that use Google Cloud Datastore global queries should be carefully designed to handle these cases gracefully.
-
-The eventual consistency on reading entity values can be avoided by using a keys-only query, an ancestor query, or lookup by key (the get() method). We will discuss these different types of queries in more depth below.
-
-Eventual Consistency on Reading an Index
-
-An index may not yet be updated when a global query is executed. This means that, even though you may able to read the latest property values of the entities, the “list of entities” included in the query result may be filtered based on old index values.
-
-To understand the impact of eventual consistency on reading an index, imagine a scenario where a new entity, Player, is inserted into Google Cloud Datastore. The entity has a property, Score, which has an initial value of 300. Immediately after the insertion, you execute a keys-only query to fetch all entities with a Score value greater than 0. You would then expect the Player entity, just recently inserted, to appear in the query results. Perhaps unexpectedly, instead, you may find that the Player entity does not appear in the results. This situation can occur when the index table for the Score property is not updated with the newly inserted value at the time of the query execution.
-
-Remember that all the queries in Google Cloud Datastore are executed against index tables, and yet the updates to the index tables are asynchronous. Every entity update is, essentially, made up of two phases. In the first phase, the commit phase, a write to the transaction log is performed. In the second phase, data is written and indexes are updated. If the commit phase succeeds, then the write phase is guaranteed to succeed, though it might not happen immediately. If you query an entity before the indexes are updated, you may end up viewing data that is not yet consistent.
-
-As a result of this two phase process, there is a time delay before the latest updates to entities are visible in global queries. Just as with entity value eventual consistency, the time delay is typically small, but may be longer (even minutes or more in exceptional circumstances).
-
-The same thing can happen after updates as well. For example, suppose you update an existing entity, Player, with a new Score property value of 0, and executed the same query immediately afterwards. You would expect the entity not to appear in the query results because the new Score value of 0 would exclude it. However, due to the same asynchronous index update behavior, it is still possible for the entity to be included in the result.
-
-The eventual consistency on reading an index can be only be avoided by using an ancestor query or lookup by key method. A keys-only query can not avoid this behavior.
-
-Strong Consistency on Reading Entity Values and Indexes
-
-In Google Cloud Datastore, there are only two APIs that provide a strongly consistent view for reading entity values and indexes: (1) the lookup by key method and (2) the ancestor query. If application logic requires strong consistency, then the developer should use one of these methods to read entities from Google Cloud Datastore.
-
-Google Cloud Datastore is specifically designed to provide strong consistency on these APIs. When calling either one of them, Google Cloud Datastore will flush all pending updates on one of the replicas and index tables, then execute the lookup or ancestor query. Thus, the latest entity value, based on the updated index table, will always be returned with values based on the latest updates.
+구글 클라우드 데이터스토어는 이 API들을 통해 스트롱 컨시스턴시가 제공되도록 디자인되어 있습니다. 이 중에 하나를 호출하게 되면, 구글 클라우드 데이터스토어는 복제본중 하나와 인덱스 테이블에 밀린 모든 변경사항들을 처리한 뒤에 키를 통한 조회 또는 엔세스터 쿼리를 실행할 것입니다. 그래서 변경된 인덱스 테이블을 통한 최신 엔티티 값은 항상 마지막 변경을 포함한 값들을 반환할 것입니다.
 
 The lookup by key call, in contrast to queries, only returns one entity or a set of entities specified by a key or a set of keys. This means that an ancestor query is the only way in Google Cloud Datastore to satisfy strong consistency requirement together with a filtering requirement. However, ancestor queries do not work without specifying an entity group.
 
