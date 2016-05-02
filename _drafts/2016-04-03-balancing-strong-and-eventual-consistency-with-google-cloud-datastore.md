@@ -45,9 +45,9 @@ _그림 1: 이벤츄얼 컨시스턴시에서의 복제 컨셉 묘사_
 
 스트롱 컨시스턴시의 배포 방법과 복제 과정에 대한 컨셉 뷰는 그림2와 같습니다. 이 다이어그램에서 여러분들은 어떻게 원본 노드가 항상 복제품들과 일관성을 유지하는 지와, 수정이 완료될 때 까지 노드에 접근이 불가능하다는 것을 알 수 있습니다.
 
-![Figure 2: Conceptual Depiction of Replication with Strong Consistency](https://cloud.google.com/datastore/docs/articles/images/balancing-strong-and-eventual-consistency-with-google-cloud-datastore/strong-consistency.png)
+![그림 2: Conceptual Depiction of Replication with Strong Consistency](https://cloud.google.com/datastore/docs/articles/images/balancing-strong-and-eventual-consistency-with-google-cloud-datastore/strong-consistency.png)
 
-_Figure 2: 스트롱 컨시스턴시에서의 복제 컨셉 묘사_
+_그림 2: 스트롱 컨시스턴시에서의 복제 컨셉 묘사_
 
 ## 스트롱 컨시스턴시(Strong Consistency)와 이벤츄얼 컨시스턴시(Eventual Consistency) 균형 맞추기
 
@@ -84,7 +84,7 @@ _표 1: 구글 클라우드 데이터스토어의 질의호출들과 그에 해�
 
 엔티티를 읽을 때의 이벤츄얼 컨시스턴시는 keys-only 쿼리, 엔세스터 쿼리, (get() 메소드를 이용한는) key를 이용한 쿼리를 통해 피할 수 있습니다. 뒤에서 이런 다른 형태의 쿼리들에 대하여 알아봅니다.
 
-## 인덱스를 읽을 대의 이벤츄얼 컨시스턴시(Eventual Consistency)
+## 인덱스를 읽을 시점의 이벤츄얼 컨시스턴시(Eventual Consistency)
 
 글로벌 쿼리가 실행될때 아마도 인덱스는 아직 변경되지 않았을 것입니다. 이 말인 즉슨 반환된 엔티티들의 최종 변경값은 읽을 수 있더라도, 반환된 "엔티티 목록" 결과는 아마도 이전 인덱스 값에 의해 만들어진 것일 수 있습니다.
 
@@ -102,38 +102,46 @@ _표 1: 구글 클라우드 데이터스토어의 질의호출들과 그에 해�
 
 구글 클라우드 데이터스토어에서는 엔티티와 인덱스를 위한 강력한 일관성을 보장하는 방법으로는 (1) key를 이용해서 찾는 방법과 (2) 엔세스터 쿼리, 오직 이 두가지 API만을 제공합니다. 만약 어플리케이션 로직이 스트롱 컨시스턴시를 요구한다면 개발자는 반드시 이 방법중 하나를 사용해 구글 클라우드 데이터스토어의 엔티티들을 읽어야 합니다.
 
-구글 클라우드 데이터스토어는 이 API들을 통해 스트롱 컨시스턴시가 제공되도록 디자인되어 있습니다. 이 중에 하나를 호출하게 되면, 구글 클라우드 데이터스토어는 복제본중 하나와 인덱스 테이블에 밀린 모든 변경사항들을 처리한 뒤에 키를 통한 조회 또는 엔세스터 쿼리를 실행할 것입니다. 그래서 변경된 인덱스 테이블을 통한 최신 엔티티 값은 항상 마지막 변경을 포함한 값들을 반환할 것입니다.
+구글 클라우드 데이터스토어는 이 API들을 통해 스트롱 컨시스턴시가 제공되도록 디자인되어 있습니다. 이 중에 하나를 호출하게 되면, 구글 클라우드 데이터스토어는 복제본 중 하나와 인덱스 테이블에 밀린 모든 변경사항들을 처리한 뒤에 키를 통한 조회 또는 엔세스터 쿼리를 실행할 것입니다. 그래서 변경된 인덱스 테이블을 통한 최신 엔티티 값은 항상 마지막 변경을 포함한 값들을 반환할 것입니다.
 
-The lookup by key call, in contrast to queries, only returns one entity or a set of entities specified by a key or a set of keys. This means that an ancestor query is the only way in Google Cloud Datastore to satisfy strong consistency requirement together with a filtering requirement. However, ancestor queries do not work without specifying an entity group.
+쿼리들과는 반대로 키를 통한 호출은 오직 한 개의 엔티티 또는 키에 맞는 엔티티 묶음 또는 키들의 묶음 만을 반환합니다. 이 말은 엔세스터 쿼리만이 구글 클라우드 데이터스토어에서 스트롱 컨시스턴시 조건과 필터 조건을 충족시킬 수 있는 유일한 방법이란 것 입니다. 하지만 엔세스터 쿼리는 엔티티 그룹을 지정하지 않고서는 동작하지 않습니다.
 
-Ancestor Query and Entity Group
+## 엔세스터 쿼리(ancestor Query)와 엔티티 그룹(Entity Group)
 
-As discussed at the beginning of this document, one of the benefits of Google Cloud Datastore is that developers can find an optimal balance between strong consistency and eventual consistency. In Google Cloud Datastore, an entity group is a unit with strong consistency, transactionality, and locality. By utilizing entity groups, developers can define the scope of strong consistency among the entities in an application. In this way, the application can maintain consistency inside the entity group while, at the same time, achieving high scalability, availability, and performance as a complete system.
+이 문서 처음에 이야기했던 것 처럼, 구글 클라우드 데이터스토어의 장점 중 하나는 개발자가 스트롱 컨시스턴시와 이벤츄얼 컨시스턴시의 최적 균형을 조절할 수 있다는 것입니다. 구글 클라우드 데이터 스토어에서 엔티티 그룹은 스트롱 컨시스턴시, 트렌젝션, 지역성(locality)의 단위입니다. 엔티트 그룹들을 구성함으로써 개발자들은 어플리케이션내 엔티티들 사이의 스트롱 컨시스턴시 범위를 지정할 수 있습니다. 이러한 방법으로 어플리케이션은 전체 시스템에서 고확장성, 고가용성, 고성능을 얻는 동시에 엔티티 그룹 내부의 일관성을 조절할 수 있습니다.
 
-An entity group is a hierarchy formed by a root entity and its children or successors.[1] To create an entity group, a developer specifies an ancestor path, which is, essentially, a series of parent keys prefixing the child key. The concept of entity group is illustrated in Figure 3. In this case, the root entity with the key “ateam” has two children with the keys “ateam/098745” and “ateam/098746”.
+엔티티 그룹은 루트 엔티티와 자식들 또는 후임들로 이루어진 계층 구조입니다.[1] 엔티티그룹을 생성하려면 기본적으로 개발자는 일련의 부모키와 하위키로 이루어진 엔세스터 패스를 지정해야합니다. 엔티티 그룹의 컨셉은 그림3처럼 그려집니다. 이 경우에는 "ateam"인 루트키가 “ateam/098745” 와 “ateam/098746”로 설정된 키를 가진 두개의 자식들을 가지고 있습니다.
 
+![그림 3: 엔티티 그룹 컨셉](https://cloud.google.com/datastore/docs/articles/images/balancing-strong-and-eventual-consistency-with-google-cloud-datastore/croup-concept.png)
+_그림 3: 엔티티 그룹 컨셉_
 
-Figure 3: Schematic View of Entity Group Concept
-Inside the entity group, the following characteristics are guaranteed:
+엔티티그룹 내부에서는 다음과 같은 점들이 보장됩니다. :
 
-Strong Consistency
-An ancestor query on the entity group will return a strongly consistent result. In this way, it reflects the latest entity values filtered by the latest index state.
-Transactionality
-By demarcating a transaction programmatically, the entity group provides ACID (atomicity, consistency, isolation, and durability) characteristics in the transaction.
-Locality
-Entities in an entity group will be stored at physically close places on Google Cloud Datastore servers, because all the entities are sorted and stored by the lexicographical order of the keys. This enables an ancestor query to rapidly scan the entity group with minimal I/O.
-An ancestor query is a special form of query that only executes against a specified entity group. It executes with strong consistency. Behind the scenes, Google Cloud Datastore assures that all the pending replications and index updates are applied before executing the query.
+- 스트롱 컨시스턴시 (Strong Consistency)
 
-Ancestor Query Example
+ - 엔티티 그룹에서의 엔세스터 쿼리는 일관성이 확보된 결과가 반환됩니다. 이러한 방법으로 엔세스터 쿼리는 마지막 인덱스 상태로 걸러진 마지막 엔티티 값들을 얻게됩니다.
 
-This section describes how to use entity groups and ancestor queries in practice. In the following example, we consider the problem of managing data records for people. Suppose we have code that adds an entity of a specific kind followed immediately by a query on that kind. This concept is demonstrated by the example Python code below.
+- 트랜잭션 (Transaction)
 
-# Define the Person entity
+ - 프로그램적으로 트랜잭션을 나눌때, 엔티티 그룹은 트랜잭션 안에서 ACID (atomicity, consistency, isolation, and durability) 특성들을 제공합니다.
+
+- 지역성 (Locality)
+
+ - 엔티티그룹에서 엔티티들은 물리적으로 근접한 구글 클라우드 스토어 서버에 저장이 됩니다. 그렇기 때문에 모든 엔티티들은 키들의 사전적(lexicographical) 정렬 기준으로 정렬되고 저장됩니다. 이것은 엔세스터 쿼리가 최소한의 I/O로 엔티티 그룹을 빠르게 조회할 수 있게 해줍니다.
+
+엔세스터 쿼리는 유일하게 특정 엔티티그룹에 대하여 수행할 수 있는 특별한 쿼리입니다. 엔세스터 쿼리는 스트롱 컨시스턴시로 동작합니다. 구글 클라우드 데이터스토어는 모든 정체된 복제와 인덱스 변경이 엔세스터 쿼리 수행전에 적용되는 것을 보장합니다.
+
+## 엔세스터 쿼리(Ancestor Query) 예제
+
+이 부분에서는 엔티티 그룹과 엔세스터 쿼리를 사용하는 방법에 대하여 실습해봅니다. 뒤에 나오는 예제에서 우리는 사람들에 대하여 기록된 데이터를 관리하는 문제를 고려해봅니다. 특정 종류(Kind)에 엔티티를 추가하자마자 해당 종류의 쿼리를 실행하는 코드가 있다고 가정해봅시다. 아래의 파이썬 예제 코드를 통해 이 컨셉을 확인해봅니다.
+
+```python
+# Person 엔티티 정의
 class Person(db.Model):
     given_name = db.StringProperty()
     surname = db.StringProperty()
     organization = db.StringProperty()
-# Add a person and retrieve the list of all people
+# person을 삽입하고 모든 사람들의 목록을 꺼낸다.
 class MainPage(webapp2.RequestHandler):
     def post(self):
         person = Person(given_name='GI', surname='Joe', organization='ATeam')
@@ -144,6 +152,9 @@ class MainPage(webapp2.RequestHandler):
             people.append({'given_name': p.given_name,
                         'surname': p.surname,
                         'organization': p.organization})
+```
+
+대부분의 경우, 이 코드의 문제는 바로 위 명령에서 추가된 엔티티가 반환되지 않는 다는 것입니다. 삽입 이후에 바로 뒷줄에서 실행되는 쿼리들은 실행되는 시점에 인덱스가 변경되지 않았을 것입니다. 
 The problem with this code is that, in most cases, the query will not return the entity added in the statement above it. Since the query follows in the line following immediately after the insert, the index will not be updated when the query is executed. However, there is also a problem with validity of this use case: is there really a need to return a list of all people in one page with no context? What if there are a million people? The page would take too long to return.
 
 The nature of the use case suggests that we should provide some context to narrow the query. In this example, the context that we will use will be the organization. If we do that, then we can use the organization as an entity group and execute an ancestor query, which solves our consistency problem. This is demonstrated with the Python code below.
