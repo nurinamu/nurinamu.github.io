@@ -154,11 +154,11 @@ class MainPage(webapp2.RequestHandler):
                         'organization': p.organization})
 ```
 
-대부분의 경우, 이 코드의 문제는 바로 위 명령에서 추가된 엔티티가 반환되지 않는 다는 것입니다. 삽입 이후에 바로 뒷줄에서 실행되는 쿼리들은 실행되는 시점에 인덱스가 변경되지 않았을 것입니다. 
-The problem with this code is that, in most cases, the query will not return the entity added in the statement above it. Since the query follows in the line following immediately after the insert, the index will not be updated when the query is executed. However, there is also a problem with validity of this use case: is there really a need to return a list of all people in one page with no context? What if there are a million people? The page would take too long to return.
+대부분의 경우, 이 코드의 문제는 바로 위 명령에서 추가된 엔티티가 반환되지 않는 다는 것입니다. 삽입 이후에 바로 뒷 줄에서 실행되는 쿼리들은 실행되는 시점에 인덱스가 변경되지 않았을 것입니다. 그러나 이런 경우에 또 다른 유효성 문제가 있습니다. 전환없이 한페이지에 모든 사용자 목록을 가져올 필요가 있을까요? 만약에 그 수가 백만이라면? 아마도 페이지는 표시하기에 너무 길겁니다.
 
-The nature of the use case suggests that we should provide some context to narrow the query. In this example, the context that we will use will be the organization. If we do that, then we can use the organization as an entity group and execute an ancestor query, which solves our consistency problem. This is demonstrated with the Python code below.
+사용성의 본질은 쿼리 범위를 좁힐 수 있는 일부 내용만을 제공하도록 하는 것입니다. 이 예제에서 우리가 사용하게될 부분은 `Organization`이 될 것입니다. 만약 우리가 `Organization`을 구성하게되면, 이것을 엔티티 그룹으로 사용할 수 있고, 컨시스턴시 문제를 해결해줄 엔세스터 쿼리도 사용할 수 있게 됩니다. 아래의 파이썬 코드를 통해 이것을 설명합니다.
 
+```python
 class Organization(db.Model):
     name = db.StringProperty()
 class Person(db.Model):
@@ -176,6 +176,10 @@ class MainPage(webapp2.RequestHandler):
         for p in q.run():
             people.append({'given_name': p.given_name,
                         'surname': p.surname})
+```
+
+GqlQuery상으로 엔세스터 `org`가 명시된 이 쿼리는 바로 직전에 삽입된 엔티티를 반환합니다. 예제는 엔세스터와 `person`의 이름으로 질의하여 특정인을 찾아내도록 변형 될 수도 있습니다. 반대로 엔티티키를 저장하고 그 키를 통해 찾을 수도 있습니다.
+
 This time, with the ancestor org specified in the GqlQuery, the query returns the entity just inserted. The example could be extended to drill down on an individual person by querying the person’s name with the ancestor as part of the query. Alternatively, this could have also been done by saving the entity key and then using it to drill down with a lookup by key.
 
 Maintaining Consistency Between Memcache and Google Cloud Datastore
