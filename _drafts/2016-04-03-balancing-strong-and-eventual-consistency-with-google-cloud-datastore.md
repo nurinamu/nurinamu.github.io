@@ -154,7 +154,7 @@ class MainPage(webapp2.RequestHandler):
                         'organization': p.organization})
 ```
 
-대부분의 경우, 이 코드의 문제는 바로 위 명령에서 추가된 엔티티가 반환되지 않는 다는 것입니다. 삽입 이후에 바로 뒷 줄에서 실행되는 쿼리들은 실행되는 시점에 인덱스가 변경되지 않았을 것입니다. 그러나 이런 경우에 또 다른 유효성 문제가 있습니다. 전환없이 한페이지에 모든 사용자 목록을 가져올 필요가 있을까요? 만약에 그 수가 백만이라면? 아마도 페이지는 표시하기에 너무 길겁니다.
+대부분의 경우, 이 코드의 문제는 바로 위 명령에서 추가된 엔티티가 반환되지 않는 다는 것입니다. 삽입 이후에 바로 뒷 줄에서 실행되는 쿼리들은 실행되는 시점에 인덱스가 변경되지 않았을 것입니다. 그러나 이런 경우에 또 다른 타당성 문제가 있습니다. 전환없이 한페이지에 모든 사용자 목록을 가져올 필요가 있을까요? 만약에 그 수가 백만이라면? 아마도 페이지를 표시하는데 너무 많은 시간이 걸릴 것입니다.
 
 사용성의 본질은 쿼리 범위를 좁힐 수 있는 일부 내용만을 제공하도록 하는 것입니다. 이 예제에서 우리가 사용하게될 부분은 `Organization`이 될 것입니다. 만약 우리가 `Organization`을 구성하게되면, 이것을 엔티티 그룹으로 사용할 수 있고, 컨시스턴시 문제를 해결해줄 엔세스터 쿼리도 사용할 수 있게 됩니다. 아래의 파이썬 코드를 통해 이것을 설명합니다.
 
@@ -180,21 +180,20 @@ class MainPage(webapp2.RequestHandler):
 
 GqlQuery상으로 엔세스터 `org`가 명시된 이 쿼리는 바로 직전에 삽입된 엔티티를 반환합니다. 예제는 엔세스터와 `person`의 이름으로 질의하여 특정인을 찾아내도록 변형 될 수도 있습니다. 반대로 엔티티키를 저장하고 그 키를 통해 찾을 수도 있습니다.
 
-This time, with the ancestor org specified in the GqlQuery, the query returns the entity just inserted. The example could be extended to drill down on an individual person by querying the person’s name with the ancestor as part of the query. Alternatively, this could have also been done by saving the entity key and then using it to drill down with a lookup by key.
+## 멤캐쉬(Memcache)와 클라우드 데이터스토어(Cloud Datastore)간 일관성 유지
 
-Maintaining Consistency Between Memcache and Google Cloud Datastore
+엔티티 그룹은 멤캐쉬 엔트리들과 구글 클라우드 데이터스토어 엔티티들 간의 일관성을 유지하는 하나의 단위로도 사용됩니다. 예를 들어 각 팀 별 `Person`의 갯수를 세고 멤캐쉬에 그 값을 저장하는 시나리오를 생각해봅시다. 구글 클라우드 데이터 스토어에서 마지막의 값과 캐싱된 데이터가 일관성을 확실히 유지시키기위해 엔티티 그룹 메타데이터를 사용할 것입니다. 메타데이터는 특정 엔티티 그룹의 최신 버전 숫자를 반환합니다. 그러면 멤캐쉬에 저장된 숫자와 버전 숫자를 비교할 수 있습니다. 하나의 메타데이터 셋 하나를 읽는 방법을 사용하면 전체 엔티티 그룹안에 있는 엔티티 하나하나를 모두 탐색하지 않고서도 엔티티 그룹안에서의 변경을 감지할 수 있습니다.
 
-Entity groups can also be used as a unit for maintaining consistency between Memcache entries and Google Cloud Datastore entities. For example, consider a scenario where you count the number of Persons in each team and store them in Memcache. To make sure the cached data is consistent with the latest values in Google Cloud Datastore, you can use entity group metadata. The metadata returns the latest version number of specified entity group. You can compare the version number with the number stored in Memcache. Using this method you can detect a change in any of the entities in the entire entity group by reading from one set of metadata, instead of scanning all the individual entities in the group.
+## 엔티티 그룹(Entity Group)과 엔세스터 쿼리(Ancestor Query)의 한계들
 
-Limitations of Entity Group and Ancestor Query
+엔티티 그룹과 엔세스터 쿼리를 사용하는 방식이 만병통치약은 아니다. 아래 목록에 나온 것처럼 기술을 일반에 적용하는 것에는 실제로 2가지 어려움이 따릅니다.
 
-The approach of using entity groups and ancestor queries is not a silver bullet. There are two challenges in practice that make it hard to apply the technique in general, as listed below.
+1. 각 엔티티 그룹에서 초 당 한 번의 수정이 한계입니다.
+2. 엔티티 그룹 관계는 엔티티가 생성된 이후에는 변경될 수 없습니다.
 
-There is a limit of one update per second write for each entity group.
-The entity group relationship can not be changed after entity creation.
-Write Limit
+### 쓰기 한계
 
-An important challenge is that the system must be designed to contain the number of updates (or transactions) in each entity group. The supported limit is one update per second per entity group.[2] If the number of updates needs to exceed that limit then the entity group may be a performance bottleneck.
+중요한 부분은 시스템은 반드시 각 엔티티 그룹안의 수정(또는 트랜잭션) 횟수를 고려해서 디자인 되어야한다는 것 입니다. 공유된 한계는 엔티티 그룹당 1초에 하나의 업데이트 입니다.<sup>[[2]](https://cloud.google.com/datastore/docs/articles/balancing-strong-and-eventual-consistency-with-google-cloud-datastore/#ftnt2)</sup> 만약 한계를 초과한 수정 횟수가 필요하게되면 엔티티 그룹은 퍼포먼스 버틀넥이 될 수 있습니다.
 
 In the example above, each organization may need to update the record of any person in the organization. Consider a scenario where there are 1,000 people in the “ateam” and each person may have one update per second on any of the properties. As a result, there may be up to 1,000 updates per second in the entity group, a result which would not be achievable because of the update limit. This illustrates that it is important to choose an appropriate entity group design that considers performance requirements. This is one of the challenges of finding the optimal balance between eventual consistency and strong consistency.
 
