@@ -195,87 +195,98 @@ GqlQuery상으로 엔세스터 `org`가 명시된 이 쿼리는 바로 직전에
 
 중요한 부분은 시스템은 반드시 각 엔티티 그룹안의 수정(또는 트랜잭션) 횟수를 고려해서 디자인 되어야한다는 것 입니다. 공유된 한계는 엔티티 그룹당 1초에 하나의 업데이트 입니다.<sup>[[2]](https://cloud.google.com/datastore/docs/articles/balancing-strong-and-eventual-consistency-with-google-cloud-datastore/#ftnt2)</sup> 만약 한계를 초과한 수정 횟수가 필요하게되면 엔티티 그룹은 퍼포먼스 버틀넥이 될 수 있습니다.
 
-In the example above, each organization may need to update the record of any person in the organization. Consider a scenario where there are 1,000 people in the “ateam” and each person may have one update per second on any of the properties. As a result, there may be up to 1,000 updates per second in the entity group, a result which would not be achievable because of the update limit. This illustrates that it is important to choose an appropriate entity group design that considers performance requirements. This is one of the challenges of finding the optimal balance between eventual consistency and strong consistency.
+위 예제에서 각 `Organization`은 그 안의 어떤 `Person`의 기록을 수정해야할 수 도 있습니다. `ateam`안에 1000개의 `Person`이 있고, 각 `Person`은 특정 속성을 초당 한번 수정해야한다고 가정해봅시다. 결과적으로 엔티티그룹 안에서 초당 최대 1000번의 수정이 있을 수 있습니다만, 수정 한계 때문에 성공하지 못할 것입니다. 이는 적절한 엔티티그룹 디자인을 위해서는 성능 요구사항을 고려해야한다는 것을 뜻 합니다. 이것이 이벤츄얼 컨시스턴시와 스트롱 컨시스턴시의 적절한 균형을 찾기 위한 도전 중에 하나 입니다.
 
-Immutability of Entity Group Relationships
+## 엔티티그룹 관계들의 불변성
 
-A second challenge is the immutability of entity group relationships. The entity group relationship is formed statically based on key naming. It cannot be changed after creating the entity. The only available option for changing the relationship is to delete the entities in an entity group and recreate them again. This challenge prevents us from using entity groups to define ad-hoc scopes for consistency or transactionality dynamically. Instead, the consistency and transactionality scope are closely tied with the static entity group defined at design time.
+두번째 도전은 엔티티그룹 관계들의 불변성입니다. 엔티티그룹 관계는 키 이름을 기반해서 정적으로 고정되어 있습니다. 엔티티를 생성한 다음에는 변경될 수 없습니다. 관계를 바꿀 수 있는 유일한 방법은 엔티티 그룹안의 엔티티들을 삭제하고 다시 생성하는 것 입니다. 이 도전은 엔티티 그룹을 컨시스턴시 또는 트랜젝션을 위한 ad-hoc 범위로 정의하고 사용하는 것을 막습니다. 대신 컨시스턴시와 트랜젝션 범위는 디자인시에 정의된 정적 엔티티 그룹과 거의 동일합니다.
 
-For example, consider a scenario where you wish to implement a wire transfer between two bank accounts. This business scenario requires strong consistency and transactionality. However, the two accounts can not be grouped into one entity group last-minute or be based on a global parent. That entity group would create a bottleneck for the entire system that would hinder other wire transfer requests from being executed. So entity groups cannot be used in this way.
+예를들어, 두 개의 은행계좌 사이의 유선 이체를 구현하려는 시나리오를 생각해봅시다. 이 작업 시나리오는 스트롱 컨시스턴시와 트랜젝션이 필요합니다. 그러나 두 계좌들은 하나의 엔티티 그룹으로 엮을 수 없고 또 광역 부모에 기반할 수 도 없습니다. 그 엔티티그룹에 계좌 이체가 수행되게 되면 다른 계좌 이체 요구들을 처리하는 전체시스템에 버틀넥을 만들 것 입니다. 그래서 엔티티그룹은 이러한 방식으로 사용될 수 없습니다.
 
-However, there is an alternative way for a wire transfer to be implemented in a highly scalable and available way. One method to satisfy this requirement is to use Cross-group (XG) transactions for transactionality and the Google Cloud Datastore lookup by key method or an ancestor query for consistency. Cross-group transactions are a Google Cloud Datastore feature that allows you to have ACID characteristics for up to twenty-five entity groups or entities in one transaction. By using XG transactions, you can form a transaction scope dynamically with the two bank accounts at the time of request processing.
+하지만 고확장성과 고가용성이 가능하도록 구현된 계좌이체를 위한 대체방법이 있습니다. 이 요구사항을 만족하는 한가지 방법은 크로스그룹(Cross-group : XG) 트랜잭션과 구글 클라우드 데이터스토어의 키검색 또는 엔세스터쿼리를 사용하는 것 입니다. 크로스그룹 트랜잭션은 하나의 트랜젝션안에서 최대 25개의 엔티티그룹 또는 엔티티에 대하여 ACID 특성을 가질 수 있게 해주는 구글 클라우드 데이터스토어 기능입니다. 크로스그룹 트랜잭션을 사용함으로써 요청을 처리하는 시점에 두개의 은행 계좌에 대한 트랜잭션 범위를 동적으로 정의할 수 있습니다.
 
-Keep in mind that the XG transactions only ensure transactionality. To ensure strong consistency when reading the two bank accounts, you should use lookup by key method or an ancestor query. You will get an error if you try to execute a query that is not an ancestor query inside a transaction.
+크로스그룹 트랜잭션은 단지 트랜잭션 보장만 한다는 것을 명심해야합니다. 두 개의 은행계좌를 읽을때 스트롱 컨시스턴시를 확보하기위해 반드시 키검색 또는 앤세스터쿼리를 사용해야합니다. 트랜잭션 안에서 앤세스터쿼리를 사용하지 않고 쿼리 실행을 시도하면 애러가 발생합니다.
 
-Alternatives to Ancestor Queries
+# 엔세스터쿼리의 대체제들
 
-If you already have an existing application with a large number of entities stored in Google Cloud Datastore, it may be difficult to incorporate entity groups afterwards in a refactoring exercise. It would require deleting all the entities and adding them within an entity group relationship. So, in data modeling for Google Cloud Datastore, it is important to make a decision on the entity group design in the early phase of the application design. Otherwise, you may be limited in refactoring to other alternatives to achieve a certain level of consistency, such as a keys-only query followed by a lookup-by-key, or by using Memcache.
+만약 여러분이 이미 구글 클라우드 데이터 스토어에 많은 숫자의 엔티티들을 저장한 어플리케이션을 가지고 있다면, 리펙토링을 통해 엔티티그룹을 분리하는 것은 힘들 것 입니다. 그러기 위해서는 모든 엔티티들을 삭제하고 엔티티 그룹 관계에 그것들을 추가하는 것이 필요할 것입니다. 그래서 구글 클라우드 데이터스토어를 위한 데이터 모델링에서는 어플리케이션 디자인 전반부에 해당하는 엔티티 그룹 디자인할 때의 결정이 중요합니다. 그렇지 않으면 특정 레벨의 컨시스턴시를 얻기 위해 키 검색을 통한 키 쿼리 또는 멤캐쉬를 이용하는 것 같은  대체 방식으로 리펙토링시에도 한계가 있을 것입니다.
 
-Keys-only Global Query Followed by Lookup by Key
+## Key를 통한 조회(Lookup by key) 뒤의 키전용 전역 쿼리
 
-A keys-only global query is a special type of global query that returns only keys without the property values of the entities. Since the return values are only keys, the query does not involve an entity value with a possible consistency problem. A combination of the keys-only, global query with a lookup method will read the latest entity values. But it should be noted that a keys-only global query can not exclude the possibility of an index not yet being consistent at the time of the query, which may result in an entity not being retrieved at all. The result of the query could potentially be generated based on filtering out old index values. In summary, a developer may use a keys-only global query followed by lookup by key only when an application requirement allows the index value not yet being consistent at the time of a query.
+키전용 전역 쿼리는 엔티티들의 속성 값을 제외하고 단지 키들만 반환하는 특별한 형태의 전역 쿼리입니다. 반환되는 값들이 단지 키들뿐이기 때문에 이 쿼리는 엔티티 값에서 발생할 수 있는 컨시스턴시 문제가 나타나지 않습니다. 키전용 옵션과 전역 쿼리의 조합은 lookup method와 함께 최신 엔티티 값들을 읽을 것입니다. 하지만 하나의 엔티티도 반환하지 못한 결과를 가 발생할 수 있는 키전용 전역 쿼리는 쿼리하는 시점에 아직 인덱스가 일관성을 갖추지 못하고 있었을 가능성을 배제할 수 없다는 것을 반드시 인지하고 있어야합니다. 쿼리의 결과는 잠재적으로 이전 인덱스 값들로 필터되어 생성되었을 수 있습니다. 요약하면, 개발자는 어플리케이션이 인덱스 일관성이 유지않아도되는 시점에서만 키 조회 뒤의 키전용 전역 쿼리를 사용해야 할 것입니다.
 
-Using Memcache
+## 멤캐쉬(Memcache) 사용하기
 
-The Memcache service is volatile, but strongly consistent. So, by combining Memcache lookups and Google Cloud Datastore queries, it is possible to build a system that will minimize consistency issues most of the time.
+멤캐쉬 서비스는 휘발성이지만 아주 일관적입니다. 그래서 멤캐쉬 검색과 구글 클라우드 데이터스토어 쿼리들의 결합에 의해 일관성 문제를 최소화할 수 있는 시스템을 만드는 것이 가능합니다.
 
-For example, consider the scenario of a game application that maintains a list of Player entities, each with a score greater than zero.
+예를 들어, 0보다 큰 점수를 가진 `Player` 엔티티들의 목록을 처리하는 한 게임 어플리케이션 의 시나리오를 생각해봅시다.
+- 삽입하고 수정하는 리퀘스트들에 의해 멤캐쉬 뿐아니라 구글 클라우드 데이터 스토어에 있는 `Player` 엔티티 목록에 변경사항들을 적용합니다.
+- 쿼리 리퀘스트들 때문에 멤캐쉬로 부터 `Player` 엔티티들 목록을 읽습니다. 그리고 멤캐쉬에 해당 목록이 존재하지 않으면 구글 클라우드 데이터스토어에 키전용 쿼리를 실행합니다.
 
-For insert or update requests, apply them to the list of Player entities in Memcache as well as Google Cloud Datastore
-For query requests, read the list of Player entities from Memcache and execute a keys-only query on Google Cloud Datastore when the list is not present in Memcache
-The returned list will be consistent whenever the cached list is present in Memcache. If the entry has been evicted, or the Memcache service is not available temporarily, the system may need to read the value from a Google Cloud Datastore query that could possibly return an inconsistent result. This technique can be applied to any application that tolerates a small amount of inconsistency.
+캐쉬된 목록이 멤캐쉬에 존재할 때는 언제나 반환된 목록은 일관적일 것입니다. 만약 캐쉬 데이터가 사라지게되거나 멤캐쉬 서비스가 일시적으로 사용할 수 없다면, 시스템은 아마도 구글 클라우드 데이터스토어에서 일관성 확보가 되지 않았을 가능성이 있는 결과를 읽어야할 수 밖에 없을 것 입니다. 이 방식은 적은 양의 오차를 견뎌내는 모든 시스템에 적용될 수 있습니다.
 
-There are some best practices when using Memcache as a caching layer for Google Cloud Datastore:
+구글 클라우드 데이터 스토어의 캐싱 레이어로써 멤캐쉬를 사용하는 몇가지 최고의 예제가 있습니다.
 
-Catch Memcache exceptions and errors to maintain the consistency between the Memcache value and the Google Cloud Datastore value. If you receive an exception when updating the entry on Memcache, make sure to invalidate the old entry in Memcache. Otherwise there may be different values for an entity (an old value in Memcache and a new value in Google Cloud Datastore).
-Set an expiration period on the Memcache entries. It is recommended to set short time periods for the expiration of each entry to minimize the possibility of inconsistency in the case of Memcache exceptions.
-Use the compare-and-set feature when updating the entries for concurrency control. This will help ensure that simultaneous updates on the same entry will not interfere with each other.
-Gradual Migration to Entity Groups
+- 멤캐쉬의 값과 구글 클라우드 데이터스토어의 값 간의 일관성을 유지하기 위해서는 멤캐쉬 예외상황과 오류들을 처리하세요. 만약 멤캐쉬 엔트리를 수정할때 예외가 발생하게되면, 멤캐쉬 안의 기존 엔트리를 확실하게 갱신해야합니다. 그렇지 않으면 엔트리는 아마도 다른 값을 가지게 될 것 입니다. (멤캐쉬는 예전 값, 데이터스토어에는 새로운 값)
+- 멤캐쉬 엔트리들에는 [만료 주기](https://cloud.google.com/appengine/docs/java/memcache/#Java_How_cached_data_expires)를 설정하세요. 멤캐쉬 예외들 상황에서의 불일치 가능성을 최소화하기 위해 각 엔트리의 만기 시간 주기를 짧게 설정하기를 추천합니다.
+- 엔트리들을 수정할 때 일관성 관리를 위해 [비교하고 설정하는 기능](https://cloud.google.com/appengine/docs/java/memcache/#Java_Using_compare_and_set_in_Java)을 사용하세요. 이것은 같은 엔트리에 대한 동시 수정사항들이 서로 방해하지 않을 것이란 것을 확실히하는데 도움을 줄 것 입니다.
 
-The suggestions made in the previous section only lessen the possibility of inconsistent behavior. It is best to design the application based on entity groups and ancestor queries when strong consistency is required. However, it may not be feasible to migrate an existing application, which may include changing an existing data model and application logic from global queries to ancestor queries. One way to achieve this is by having a gradual transition process, such as the following:
+## 엔티티 그룹으로의 점진적 마이그레이션
 
-Identify and prioritize the functions in the application that require strong consistency.
-Write new logic for insert() or update() functions using entity groups in addition to (rather than replacing) existing logic. In this way, any new inserts or updates on both new entity groups and old entities can be handled by an appropriate function.
-Modify the existing logic for read or query functions ancestor queries are executed first if a new entity group exists for the request. Execute the old global query as fallback logic if the entity group does not exist.
-This strategy allows for a gradual migration from an existing data model to a new data model based on entity groups that minimizes the risk of issues caused by eventual consistency. In practice, this approach is dependent on specific use cases and requirements for its application to an actual system.
+이전 세션에서는 단지 비일치 가능성을 줄이는 방향으로 제안되어져 있었습니다. 스트롱 컨시스턴시가 필요할 때는 엔티티 그룹과 엔세스터 쿼리를 기반으로 어플리케이션을 디자인 하는 것이 최선입니다. 하지만 기존의 어플리케이션이 기존의 데이터 모델을 변경해야하고 어플리케이션 로직을 전역 쿼리에서 엔세스터 쿼리로 변경해야하는 것을 포함하는 경우의 마이그레이션에는 아마도 알맞지 않을 것입니다. 이 상황을 해결하기위한 한가지 방법은 다음과 같은 방식으로 점진적으로 변경하는 과정을 가지는 것입니다 :
 
-Fallback to Degraded Mode
+1. 어플리케이션 안에서 스트롱 컨시스터시가 필요한 함수들을 확인하고 우선순위를 정합니다.
 
-At present, it is difficult to detect a situation programmatically when an application has deteriorated consistency. However, if you do happen to determine through other means that an application has deteriorated consistency, then it may be possible to implement a degraded mode that could be turned on or off to disable some areas of application logic that require strong consistency. For example, rather than showing an inconsistent query result on a billing report screen, a maintenance message for that particular screen could be shown instead. In this way, the other services in the application can continue serving, and in turn, reduce the impact to the user experience.
+2. `insert()` 또는 `update()` 함수의 기존 로직에 (교체 대신) 엔티티 그룹 사용을 추가하는  새 로직을 작성합니다. 이 방식을 통해, 새로운 삽입 또는 수정들은 새 엔티티 그룹들과 기존의 엔티티들 양쪽으로 적절한 함수를 통해 처리될 것 입니다.
 
-Minimizing Time to Achieve Full Consistency
+3. 만약 요청처리를 위한 새 엔티티 그룹이 존재할 때는 기존의 조회 또는 쿼리 함수들이 엔세스터 쿼리로 우선 수행되도록 로직을 수정합니다. 만약 엔티티 그룹이 존재하지 않을 떄는 대체 로직으로서 기존의 전역 쿼리를 수행합니다.
 
-In a large application with millions of users or terabytes of Google Cloud Datastore entities, it is possible for inappropriate usage of Google Cloud Datastore to lead to deteriorated consistency. Such practices include:
+이 전략은 기존의 데이타 모델에서 엔티티 그룹을 사용함으로써 이벤츄얼 컨시스턴시 때문에 발생하는 이슈의 리스크를 최소화할 수 있는 새 데이터 모델로 점진적 마이그레이션을 가능하게 합니다. 실제에서 이러한 접근방식은 특수한 경우들과 실제 시스템의 어플리케이션을 위한 요구사항들에 따라 달라질 수 있습니다.
 
-Sequential numbering in entity keys
-Too many indexes
-These practices do not affect small applications. However, once the application grows very large, these practices increase the possibility of longer times needed for consistency. So it is best to avoid them at the early stages of application design.
+## Degraded 모드로 뒷걸음질
 
-Anti-Pattern #1: Sequential Numbering of Entity Keys
+현재 프로그램적으로 어플리케이션이 컨시스턴시 문제 발생 상황을 알아차리는 것은 어렵습니다. 하지만 잘못된 컨시스턴시를 가진 어플리케이션이 아닌 다른 수단으로 처리하는 것을 사용할 수 있다면, 아마도 스트롱 컨시스턴시를 필요로하는 로직부분을 비활성화했다 안했다 할 수 있는 degraded mode를 구현하는 것이 가능할 것입니다. 예를 들어 결제 보고서 화면에 잘못된 쿼리 결과를 보여주는 것 대신에 유지보수 메세지를 표시하는 것이 가능합니다. 이러한 방식은 어플리케이션의 다른 서비스들은 계속해서 제공될 수 있으고 사용자 경험에 나쁜 영향을 줄여줄 수 있습니다.
 
-Before the release of App Engine SDK 1.8.1, Google Cloud Datastore used a sequence of small integer IDs with generally consecutive patterns as the default auto-generated key names. In some documents this is referred to as a “legacy policy” for creating any entities that have no application specified key name. This legacy policy generated entity key names with sequential numbering, such as 1000, 1001, 1002, for example. However, as we have discussed earlier, Google Cloud Datastore stores entities by the lexicographical order of the key names, so that those entities will be are very likely stored on the same Google Cloud Datastore servers. If an application attracts really large traffic, this sequential numbering could cause a concentration of operations on a specific server, which may result in longer latency for consistency.
+# 완전한 컨시스턴시 확보를 위한 시간 최소화하기
 
-In App Engine SDK 1.8.1, Google Cloud Datastore introduced a new ID numbering method with a default policy that uses scattered ID’s (see reference documentation). This default policy generates a random sequence of ID’s up to 16 digits long that are approximately uniformly distributed. Using this policy, it is likely that the traffic of the large application will be better distributed among a set of Google Cloud Datastore servers with reduced time for consistency. The default policy is recommended unless your application specifically requires compatibility with the legacy policy.
+수백만의 사용자 또는 테라바이트의 구글 클라우드 데이터스토어 엔티티들을 가지는 대형 어플리케이션에서 구글 클라우드 데이터스토어의 잘못된 사용은 컨시스턴시 문제를 악화시킬 가능성이 있습니다. 다음과 같은 사례들이 그에 해당됩니다 :
 
-If you do explicitly set key names on entities, the naming scheme should be designed to access the entities evenly over the whole key name space. In other words, do not concentrate access in a particular range as they are ordered by the lexicographical order of key names. Otherwise, the same issue as with the sequential numbering may arise.
+- 순차적 넘버링을 가진 엔티티 키들
+- 너무 많은 인덱스들
 
-To understand uneven distribution of access over the keyspace, consider an example where entities are created with the sequential key names as shown in the following code:
+이러한 사례들은 작은 어플리케이션들에서는 영향이 없습니다. 하지만 어플리케이션이 정말 크게 성장한 경우에는 이러한 사례들은 컨시스턴시를 위한 시간을 길게 가져갈 가능성이 증가합니다. 그래서 어플리케이션 디자인의 초기단계에서 이러한 것들을 피하는 것이 최선입니다.
 
+## 피해야할 패턴 #1: 엔티티 키들의 순차적 넘버링
+
+앱엔진 SDK 1.8.1 릴리즈 이전에는 구글 클라우드 데이터스토어는 자동 생성되는 키이름에 일반적으로 연속적 패턴을 가지는 작은 정수의 ID들을 사용했습니다. 몇몇 문서에 이것은 어플리케이션에서 엔티티 생성시 키를 명시하지 않은 경우를 위한 `과거 정책`으로 적혀있습니다. 과거 정책은 엔티티 키이름들을 1000,1001,1002와 같은 순처적 숫자로 생성했습니다. 하지만 위에서 이미 다뤘던 것처럼 구글 클라우드 데이터스토어는 키이름들의 사전적인 정렬을 통해서 엔티티들을 저장합니다. 그래서 그런 엔티티들은 같은 구글 클라우드 데이터스토어 서버들에서 매우 가까운곳에 저장되게 될 것입니다. 만약 어플리케이션이 정말 거대한 트래픽을 받아들이게된다면 이 순차적 넘퍼링은 특정 서버에 컨시스턴시 때문에 긴 레이턴시를 가지는 오퍼레이션이 집중되는 문제를 일으킬 수 있습니다.
+
+앱엔진 SDK 1.8.1에서 구글 클라우드 데이터스토어는 분산된 ID들을 사용하는 기본값 정책을 사용하는 새 ID 넘버링 방식을 소개했습니다 ([참조문서](https://cloud.google.com/appengine/docs/java/datastore/entities#Java_Assigning_identifiers)를 보세요). 이 기본값 정책은 최대 16자리를 가지는 대략 균일하게 분포된 랜덤한 순서의 ID를 생성합니다. 이 정책을 사용함으로써 대형 어플리케이션의 트래픽은 컨시스턴시를 위한 시간은 줄어들면서 구글 클라우드 데이터스토어 서버들 세트로 보다 잘 분산될 것입니다. 이 기본값 정책은 기존의 정책과의 호환성이 필요한 특정 어필리케이션이 아닌 이상 추천됩니다.
+
+만약 엔티티에 키이름을 명시적으로 설정했다면, 명명 방식은 반드시 모든 키이름 영역전체에 골고루 엔티티들이 접근하도록 디자인 되어야합니다. 다시말해, 키이름들이 사전적으로 정렬된 것 같은 특정 범위에 접근이 집중되어서는 안됩니다. 그러지 않으면 순차적 넘버링과 동일한 이슈가 발생할 것 입니다.
+
+키스페이스를 통한 접근의 치우침을 이해하기위해 아래의 코드에서 보이는 것 같은 순차적 키이름들로 생성된 엔티티들을 사례로 생각해봅시다:
+
+```
 p1 = Person(key_name='0001')
 p2 = Person(key_name='0002')
 p3 = Person(key_name='0003')
 ...
-The application access pattern may create a “hot spot” over a certain range of the key names, such as having concentrated access on recently created Person entities. In this case, the frequently accessed keys will all have higher ID’s. The load may then be concentrated on a specific Google Cloud Datastore server.
+```
 
-Alternatively, to understand even distribution over the keyspace, consider using long random strings for key names. This is illustrated in the following example:
+이러한 어플리케이션 접근 패턴은 키이름들의 특정 범위를 통해 아마도 최근에 생성된 `Person`엔티티들에 집중된 접근을 가지는 `hot spot`을 생성하게될 것입니다. 이 경우에 자주 접근되는 키들은 모두 보다 큰 ID들을 가질 것입니다. 부하는 아마도 하나의 특정 구글 클라우드 데이터스토어 서버로 집중될 것입니다.
 
+반대로 키스페이스를 통해 고른 분배을 이해하기 위해 키이름들을 긴 랜덤 문자열을 사용하는 경우를 생각해봅시다. 이건 아래의 예제와 같습니다:
+
+```
 p1 = Person(key_name='t9P776g5kAecChuKW4JKCnh44uRvBDhU')
 p2 = Person(key_name='hCdVjL2jCzLqRnPdNNcPCAN8Rinug9kq')
 p3 = Person(key_name='PaV9fsXCdra7zCMkt7UX3THvFmu6xsUd')
 ...
-Now the recently created Person entities will be scattered over the keyspace and on multiple servers. This assumes that there is a sufficiently large number of Person entities.
+```
 
-Anti Pattern #2: Too Many Indexes
+이제는 최근에 생성된 `Person` 엔티티들은 키스페이를 통해 복수의 서버들로 흩어지게 될 것입니다. 이것은 `Person` 엔티티의 수가 충분히 커질 것을 가정한 것 입니다.
+
+## 피해야할 패턴 #2: 너무 많은 인덱스들
 
 In Google Cloud Datastore, one update on an entity will lead to update on all indexes defined for that entity kind (see Life of a Datastore Write for details). If an application uses many custom indexes, one update could involve tens, hundreds, or even thousands of updates on index tables. In a large application, an excessive use of custom indexes could result in increased load on the server and may increase the latency to achieve consistency.
 
