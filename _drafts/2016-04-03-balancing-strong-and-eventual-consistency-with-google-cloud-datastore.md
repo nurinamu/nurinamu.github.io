@@ -1,3 +1,10 @@
+---
+title : 구글 클라우드 데이터스토어에서 스트롱 컨시스턴시와 이벤츄얼 컨시스턴시의 균형잡기
+layout : default
+category : dev
+tags : gcp, google, datastore, gae, appengine, consistency
+---
+
 # 구글 클라우드 데이터스토어에서 스트롱 컨시스턴시와 이벤츄얼 컨시스턴시의 균형잡기
 
 > #### 번역
