@@ -1,14 +1,14 @@
 ---
 title : 구글 클라우드 데이터스토어에서 스트롱 컨시스턴시와 이벤츄얼 컨시스턴시의 균형잡기
 layout : default
-category : dev
+category : trans
 tags : gcp, google, datastore, gae, appengine, consistency
 ---
 
 # 구글 클라우드 데이터스토어에서 스트롱 컨시스턴시와 이벤츄얼 컨시스턴시의 균형잡기
 
 > #### 번역
-해당 번역은 정식번역이 아닌 개인 학습 목적으로 번역되었습니다. Eventual Consistency와 Strong Consistency가 너무 괴롭히기에 이 녀석을 좀 더 확실하게 분석하기 위함입니다. 이 번역안에는 의역 오역이 넘쳐나기 때문에 교정해주실 분들은 [PR]()주시면 감사하겠습니다. - **_nurinamu_**
+해당 번역은 정식번역이 아닌 개인 학습 목적으로 번역되었습니다. Eventual Consistency와 Strong Consistency가 너무 괴롭히기에 이 녀석을 좀 더 확실하게 분석하기 위함입니다. 이 번역안에는 의역 오역이 넘쳐나기 때문에 교정해주실 분들은 [PR](https://github.com/nurinamu/nurinamu.github.io)주시면 감사하겠습니다. - **_nurinamu_**
 
 원문 : [Balancing Strong and Eventual Consistency with Google Cloud Datastore](https://cloud.google.com/datastore/docs/articles/balancing-strong-and-eventual-consistency-with-google-cloud-datastore/)
 
@@ -295,34 +295,35 @@ p3 = Person(key_name='PaV9fsXCdra7zCMkt7UX3THvFmu6xsUd')
 
 ## 피해야할 패턴 #2: 너무 많은 인덱스들
 
-In Google Cloud Datastore, one update on an entity will lead to update on all indexes defined for that entity kind (see Life of a Datastore Write for details). If an application uses many custom indexes, one update could involve tens, hundreds, or even thousands of updates on index tables. In a large application, an excessive use of custom indexes could result in increased load on the server and may increase the latency to achieve consistency.
+구글 클라우드 데이터스토어에서 엔티티 하나의 수정은 엔티티 카인드에 정의된 모든 인덱스들을 수정하게 됩니다(자세한 것은 [데이터스토어 작성의 삶](https://cloud.google.com/appengine/articles/life_of_write)을 보세요). 만약 어플리케이션이 많은 커스텀 인덱스들을 사용하고 있다면, 하나의 수정은 수십개, 수백개, 또는 수천개의 인덱스 테이블 수정을 일이킬 수 있습니다. 대형 어플리케이션에서 과도한 커스텀 인덱스의 사용은 서버 부하 증가의 원인이 될 수 있습니다. 그리고 컨시스턴시 보장을 위한 대기시간이 증가할 수 있습니다.
 
-In most cases, custom indexes are added to support requirements such as customer support, troubleshooting, or data analysis tasks. Google BigQuery is a massively scalable query engine capable of executing ad-hoc queries on large datasets without pre-built indexes. It is better suited for use cases such as customer support, troubleshooting, or data analysis that require complex queries than Google Cloud Datastore.
+대부분의 경우, 커스텀 인덱스들은 고객지원, 문제 해결 또는 데이터 분석 작업과 같은 지원 요청에 의해 추가됩니다. 구글 빅쿼리는 인덱스 생성이 안된 대형 데이터셋에서 애드혹 쿼리 실행이 가능한 대용량 확장 쿼리엔진입니다. 빅쿼리는 구글 데이터 스토어보다 고객 지원,문제해결 또는 복잡한 쿼리들이 필요한 데이터 분석과 같은 경우에 더 적합합니다.
 
-One practice is to combine Google Cloud Datastore and BigQuery to fulfill different business requirements. Use Google Cloud Datastore for online transactional processing (OLTP) required for core application logic and use Google BigQuery for online analytical processing (OLAP) for backend operations. It may be necessary to implement a continuous data export flow from Google Cloud Datastore to BigQuery to move the data for necessary those queries.
+한가지 예는 다른 비즈니스 요청을 처리하기 위해 데이터 스토어와 빅쿼리를 섞어 사용하는 것입니다. 코어 어플리케이션 로직에서 필요한 온라인 트랜잭션 처리(OLTP)를 위해서는 구글 클라우드 데이터 스토어를 사용하시고, 백엔드 동작을 위한 온라인 분석 처리(OLAP)를 위해서는 구글 빅쿼리를 사용하십시요. 이런 쿼리들이 필요한 데이터들을 옮기는 것은 구글 클라우드 데이터 스토어에서 빅쿼리로 지속적인 데이터 추출 플로우를 구현해야할 것입니다.
 
-Besides an alternate implementation for custom indexes, another recommendation is to specify unindexed properties explicitly (see Property Options in the reference documentation). By default, Google Cloud Datastore will create a different index table for each indexable property of an entity kind. If you have 100 properties on a kind, there will be 100 index tables for that kind, and an additional 100 updates on each update to an entity. A best practice, then, is to set properties unindexed where possible, if they are not needed for a query condition.
+커스텀 인덱스를 위한 대체 구현말고 다른 추천방법은 명시적으로 인덱스하지 않는 프로퍼티들을 지정하는 것입니다([Properties and value types](https://cloud.google.com/datastore/docs/concepts/entities#batch_operations)를 보세요]). 기본적으로 구글 클라우드 데이터스토어는 엔티티 카인드의 각 인덱스 속성들을 위해 별도의 인덱스 테이블을 생성합니다. 만약 하나의 카인드에 100개의 속성들을 가지고 있다면, 그 카인드를 위한 100개의 인덱스 테이블이 존재할 것이고 매번 엔티티를 수정할때마다 백번의 추가 수정이 발생할 것입니다. 그래서 가장 잘된 예는 쿼리 조건에서 필요하지 않은 속성들은 인덱스 되지 않도록 설정하는 것입니다.
 
-Besides reducing the possibility of having increases times for consistency, these index optimizations may result in quite a large reduction of Google Cloud Datastore costs in a large application which heavily uses indexes.
+컨시스턴시를 위한 처리시간이 증가될 가능성을 줄이기는 것 뿐아니라 이 인덱스 최적화는 인덱스들을 많이 사용하는 대형 어플리케이션 안의 구글 클라우드 데이터스토어 비용 절감에 탁월한 결과를 보여줄 것입니다.
 
-Conclusion
+## 결론
 
-Eventual consistency is an essential element of non-relational databases that allows developers to find an optimal balance between scalability, performance, and consistency. It is important to understand how to handle the balance between eventual and strong consistency to design an optimal data model for your application. In Google Cloud Datastore, the use of entity groups and ancestor queries is the best way to guarantee strong consistency over a scope of entities. If your application cannot incorporate entity groups because of the limitations described earlier, you may consider other options such as using keys-only queries or Memcache. For large applications, apply best practices such as the use of scattered IDs and reduced indexing to decrease the time required for consistency. It may also be important to combine Google Cloud Datastore with BigQuery to fulfill business requirements for complex queries and to reduce the usage of Google Cloud Datastore indexes as far as possible.
+이벤츄얼 컨시스턴시는 확장성, 성능 그리고 컨시스턴시 사이에서 적절한 균형을 개발자가 찾을 수 있게 해주는 비관계형 데이터베이스의 기본적 요소입니다. 여러분들의 어플리케이션의 최적화된 데이터 모델을 위해 이벤츄얼 컨시스턴시와 스트롱 컨시스트 균형을 조절하는 방법을 이해하는 것은 중요한 일입니다. 구글 클라우드 데이터 스토어에서 엔티티 그룹의 사용과 엔세스터쿼리는 엔티티들간의 스트롱 컨시스턴시를 보장하기 위한 최고의 방법입니다. 만약 어플리케이션에서 앞에 설명했던 제약들로 인해 엔티티 그룹을 활용할 수 없다면, 키전용 쿼리 또는 멤캐쉬를 사용하는 것과 같은 다른 방법들을 고려할 수도 있을 것입니다. 대형 어플리케이션들을 위해 분산된 ID를 사용하는 것, 컨시스턴시 확보 시간을 줄이기위해 인덱스를 줄이는 방법과 같은 좋은 방법들을 적용하세요. 복잡한 쿼리를 위한 비즈니스 요구사항들을 수행하기위해 구글 클라우드 데이터스토어와 빅쿼리를 섞어 사용하는 것과 가능한 구글 클라우드 데이터스토어 인덱스들의 사용을 줄이는 것 또한 중요할 것입니다.
 
-Additional Resources
+##추가 자료
 
-The following resources provide more information about the topics discussed in this document:
+뒤의 자료들은 이 문서에서 다뤘던 주제들에 대하여 더 많은 정보들을 제공할 것입니다.
+(원문은 자료가 모두 python기준으로 연결되어있었지만 제가 Java쟁이 임으로 Java자료로 링크교체 하였습니다.)
 
-Google App Engine: Storing Data
-Mastering the Datastore (series)
-Google Cloud Platform Blog
-Google Cloud SQL
-Using Python App Engine with Google Cloud SQL
-Bigtable: A Distributed Storage System for Structured Data
-App Engine 1.5.2 SDK Released
-Megastore: Providing Scalable, Highly Available Storage for Interactive Services
+[Google App Engine: Storing Data](https://cloud.google.com/appengine/docs/java/datastore/)
+[Mastering the Datastore (series)](https://cloud.google.com/appengine/docs/java/storage)
+[Google Cloud Platform Blog](https://cloudplatform.googleblog.com/)
+[Google Cloud SQL](https://cloud.google.com/sql/)
+[Using Java App Engine with Google Cloud SQL](https://cloud.google.com/appengine/docs/java/cloud-sql/)
+[Bigtable: A Distributed Storage System for Structured Data](http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/archive/bigtable-osdi06.pdf)
+[App Engine 1.5.2 SDK Released](http://googleappengine.blogspot.kr/2011/07/app-engine-152-sdk-released.html)
+[Megastore: Providing Scalable, Highly Available Storage for Interactive Services](http://cidrdb.org/cidr2011/Papers/CIDR11_Paper32.pdf)
 
 
-[1] An entity group can even be formed by specifying only one key of the root or parent entity, without storing the actual entities for the root or parent, because the entity group functions are all implemented based on relationships between keys.
+[1] 엔티티 그룹은 심지어 실제 엔티티들을 저장하는 것 없이 루트 또는 부모 엔티티의 키 하나만 지정하여 만들어질 수 있습니다. 그렇기 때문에 엔티티 그룹 기능들은 모두 키들사이의 관계를 기반으로 구현되어 있습니다.
 
-[2] The supported limit is one update per second per entity group outside transactions, or one transaction per second per entity group. If you aggregate multiple updates into one transaction, then you are limited to a maximum transaction size of 10 MB and the maximum write rate of Datastore server.
+[2] 지원되는 제약은 트랜잭션 밖에서 엔티티 그룹당 1초에 하번의 수정 또는 엔티티 그룹당 1초에 하나의 트랜잭션 입니다. 만약 하나의 트랜잭션에서 복수의 수정을 처리해야한다면, 10MB의 최대 트랜잭션 사이즈와 데이터 스토어의 최대 작성율이 제한될 것입니다.
