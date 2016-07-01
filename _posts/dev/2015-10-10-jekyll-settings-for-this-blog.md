@@ -42,3 +42,6 @@ www.nurinamu.com
 
 ### 변경사항
  - 블로그 오픈 (2015/10/9)
+ - Googling 카테고리 추가 (2016/06/27)
+ - Translation 카테고리 추가 (2016/06/30)
+ - Pagination 적용 (2016/07/01)
