@@ -132,3 +132,11 @@ a{
 	font-size : 10px;
 	color : #CCC;
 }
+
+.pagination{
+	text-align: center;
+}
+
+.page_number{
+	color: #FFF;
+}
