@@ -2,6 +2,7 @@
 title : 이게 나의 첫 글인가?
 layout : default
 category : normal
+description : 홈페이지 첫 글
 ---
 ### 바쁘다는 핑계로 요새 내가 너무 공부를 안해..
 

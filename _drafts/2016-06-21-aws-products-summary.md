@@ -3,6 +3,7 @@ title : 아마존 Product 이해하기
 layout : default
 category : dev
 tags : amazon
+description : AWS(Amazon Web Service) Product들 알아보기 AWS에 대한 학습을 더 이상 미룰 수 없는 상황이 되어 우선 Product line들을 오버뷰를 시작 해보고자 어떤 제품들로 구성되었고 각 제품들은 어떤 일들을 하는지 정리합니다.
 ---
 
 # AWS(Amazon Web Service) Product들 알아보기

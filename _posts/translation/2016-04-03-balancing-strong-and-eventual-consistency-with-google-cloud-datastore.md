@@ -3,6 +3,7 @@ title : 구글 클라우드 데이터스토어에서 스트롱 컨시스턴시�
 layout : default
 category : trans
 tags : gcp, google, datastore, gae, appengine, consistency
+description : 구글 클라우드 데이터스토어에서 스트롱 컨시스턴시와 이벤츄얼 컨시스턴시의 균형잡기. 해당 번역은 정식번역이 아닌 개인 학습 목적으로 번역되었습니다. Eventual Consistency와 Strong Consistency가 너무 괴롭히기에 이 녀석을 좀 더 확실하게 분석하기 위함입니다. 이 번역안에는 의역 오역이 넘쳐나기 때문에 교정해주실 분들은 PR주시면 감사하겠습니다.
 ---
 
 # 구글 클라우드 데이터스토어에서 스트롱 컨시스턴시와 이벤츄얼 컨시스턴시의 균형잡기

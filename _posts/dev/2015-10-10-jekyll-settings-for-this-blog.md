@@ -3,6 +3,7 @@ title : Jekyll로 Github에 Static 블로그 만들기.
 layout : default
 category : dev
 tags : jekyll
+description : 기존의 Tistory Blog(http://nurinamu.tistory.com)가 거의 죽어가는 마당에 웬 새로운 블로그냐고? 블로그를 새로 시작하게되면 하고 싶었던 것들이 몇가지 있다. Front 기술들을 적용해볼 공간이 필요. 개발자 스러움을 좀 더. 꽁짜. 무제한 공간.
 ---
 ### [기존의 Tistory Blog](http://nurinamu.tistory.com)가 거의 죽어가는 마당에 웬 새로운 블로그냐고?
 
