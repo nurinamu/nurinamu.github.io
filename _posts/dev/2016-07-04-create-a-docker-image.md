@@ -104,7 +104,7 @@ root@19ae698863b3:/# apt-get install nginx
 Tomcat 설치는 뭐 한줄로 뙇
 
 ```
-root@19ae698863b3:/# apt-get inatll tomcat7
+root@19ae698863b3:/# apt-get inatll tomcat9
 ```
 
 ### <a name="gradle"></a>gradle 설치

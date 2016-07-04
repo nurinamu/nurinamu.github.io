@@ -21,6 +21,6 @@ GDG 모임에서 이런저런 이야기나오다가 토이프로젝트를 해보
 
 mac에서 Docker가 지원된다고 하니 굳이 cloud 환경에서 만들어서 올리지말고 내 로컬에서 해보기로 합니다. 일단 Docker를 처음 써보는 것이니 튜토리얼 투어를 떠나 봅니다.
 - [Getting Started with Docker for Mac](https://docs.docker.com/docker-for-mac/)
-- [Build your own images](https://docs.docker.com/engine/tutorials/dockerimages/)
+- [내가 필요한 Docker Image 만들기](http://www.nurinamu.com/dev/2016/07/04/create-a-docker-image/) : 튜토리얼 보고 학습한 다음에 기본기입니다.
 
 원하는 이미지를 만들 수 있게되었으니 이걸 나중에는 [Google Container Registry](https://cloud.google.com/container-registry/)에 올려두자.
