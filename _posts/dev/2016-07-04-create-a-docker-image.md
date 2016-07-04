@@ -8,15 +8,16 @@ description : Docker로 WAS환경을 구축해보자. 기본적으로 ubuntu 이
 
 # 내가 필요한 Docker Image 만들기
 
-일단 [Build your own images](https://docs.docker.com/engine/tutorials/dockerimages/) 문서를 참고해서 나의 이미지를 만들어보자. 이미지에 넣을 것들은 대강 아래의 것들
+일단 [Build your own images](https://docs.docker.com/engine/tutorials/dockerimages/) 문서를 참고해서 나의 이미지를 만들고 저장해봅니다.. 이미지에 넣을 것들은 대강 아래의 것들
+
  - [JDK8](#jdk8)
- - nginx
- - tomcat
- - Gradle
- - Git
+ - [nginx](#nginx)
+ - [tomcat](#tomcat)
+ - [Gradle](#gradle)
+ - [Git](#git)
 
 docker ubuntu 이미지를 받아서 위의 것들을 추가한 방식으로 이미지를 만들예정이다.
-그럼 최우선으로 ubuntu 이미지를 받아보자.
+그럼 최우선으로 ubuntu 이미지를 받아봅니다.
 
 ```
 $ docker login //docker hub 로그인
@@ -32,7 +33,7 @@ root@19ae698863b3:/#  //container안으로 진입!
 ```
 
 ## Tool 설치
-이미지 안에서 이제 모듈 설치를 위해 ubuntu의 apt-get update하고 주루룩 설치해보자.
+이미지 안에서 이제 모듈 설치를 위해 ubuntu의 apt-get update하고 주루룩 설치해봅니다.
 
 ### <a name="jdk8"></a>JDK8 설치
 
@@ -54,7 +55,7 @@ java8을 받기위해 apt-get에 repository를 추가하려면 아래를 먼저 
 root@19ae698863b3:/# apt-get install software-properties-common
 ```
 
-jdk가 있는 repository를 추가한다 webupd8team은 oracle 공식 repo가 아니다;;
+jdk가 있는 repository를 추가한다 webupd8team은 oracle 공식 repo가 아닙니다;;
 
 ```
 root@19ae698863b3:/# add-apt-repository ppa:webupd8team/java
