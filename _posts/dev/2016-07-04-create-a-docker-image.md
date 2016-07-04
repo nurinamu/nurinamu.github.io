@@ -107,4 +107,34 @@ root@19ae698863b3:/# apt-get inatll git
 
 ## Docker 이미지 만들기
 
-02e3c7b7cbc6
+이제 이미지를 만들어볼 차례입니다. 우선 Docker container안에 접속하고 있다면 `exit` 명령어로 빠져나옵니다.
+```
+root@19ae698863b3:/# exit
+$
+```
+
+Docker image를 만드는 것은 `git`과 비슷한 컨셉으로 해당 container상태를 `repo정보,tag`와 함께 `commit`을 하면 image가 생성이 됩니다.
+이때 필요한 것이 `container id` 인데 자신의 container id를 모른다면 아래의 명령으로 이전에 수행된 container 이력을 통해서 확인할 수 있습니다.
+```
+$ docker ps -a
+```
+
+`container id`를 확인 하였으면 아래의 명령으로 commit을 합니다.
+```
+$ docker commit -m "initial commit" -a "nurinamu" {container_id} nurinamu/ubuntu:basic
+```
+
+## Docker Image를 Docker hub에 올리기.
+
+만들어놓은 이미지를 언제 어디서나 접근하기 위해서는 local이 아닌 remote 공간이 필요한데 Docker에서는 [Docker Hub](http://hub.docker.com)이라는 서비스를 제공하고 있습니다. 이제 이미지를 여기에 저장해보겠습니다. 하지만 이를 위해서는 우선 당연히 [Docker Hub](http://hub.docker.com)에 계정이 있어야합니다. 계정이 있거나 생성했다면 다음 명령어로 `Docker hub`에 접근합니다.
+```
+$ docker login
+```
+
+그럼 이제 image를 `push`합니다. `git`에 익숙한 분들은 commit/push/pull 명령어에 금방 익숙해지실 수 있습니다.
+```
+$ docker push nurinamu/ubuntu:basic
+```
+만약 위 명령에서 tag 없이 push 하면 같은 이미지이름을 가진 모든 태깅 이미지가 push 됩니다.
+
+## 끝!
