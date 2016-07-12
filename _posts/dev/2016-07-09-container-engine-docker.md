@@ -1,12 +1,12 @@
 ---
-title : Google Container Engine으로 서버 환경 구축해보기
+title : Google Container Engine으로 서버 환경 구축해보기 #1
 layout : default
 category : dev
 tags : gce, gcp, docker, container engine
 description : Docker로 WAS환경을 구축해서 Google Container Engine을 써서 배포해보자.
 ---
 
-# Google Container Engine으로 서버 환경 구축해보기
+# Google Container Engine으로 서버 환경 구축해보기 #1
 
 GDG 모임에서 이런저런 이야기나오다가 토이프로젝트를 해보자는 말에 그동안 미뤄왔던 Docker와 Java8 관련 코딩을 한번 해보자는 생각에 시작해봅니다.
 
@@ -126,4 +126,6 @@ docker run -d -p 80:80 -v {local dir}:{container dir} nurinamu/gdg:local
 
 위와 같이 실행하면 container안에서 `{continer dir}` 접근시 `{local dir}`로 설정한 local 파일들을 볼 수 있습니다.
 
-원하는 이미지를 만들 수 있게되었으니 이걸 나중에는 [Google Container Registry](https://cloud.google.com/container-registry/)에 올려두자.
+원하는 이미지를 만들 수 있게되었으니 이걸 나중에는 [Google Container Registry](https://cloud.google.com/container-registry/)에 올려둡니다.
+
+다음 글에서 이제 GKE를 이용한 처리를 이야기해보겠습니다.
