@@ -101,11 +101,13 @@ root@19ae698863b3:/# apt-get install nginx
 
 ### <a name="tomcat"></a>tomcat 설치
 
-Tomcat 설치는 뭐 한줄로 뙇
+Tomcat9 설치는 직접 tar.gz을 받아서 압축을 풀고 원하는 위치에 설지한다.
 
 ```
-root@19ae698863b3:/# apt-get inatll tomcat9
+root@19ae698863b3:/# wget http://apache.mirror.cdnetworks.com/tomcat/tomcat-9/v9.0.0.M8/bin/apache-tomcat-9.0.0.M8.tar.gz
 ```
+
+Tomcat9 tar.gz은 [Apache Tomcat 9](https://tomcat.apache.org/download-90.cgi) 사이트에서 주소를 확인한다.
 
 ### <a name="gradle"></a>gradle 설치
 

@@ -51,9 +51,30 @@ container# service nginx start
 ```
 nginx.conf 파일
 
-location {
-
+location / {
+  proxy_pass http://localhost:8080; #8080으로 프록시 연결
 }
+
+location /assets {
+  root /assets
+}
+
+location /imgs {
+  root /assets/imgs
+}
+```
+
+설정을 바꿨으니 nginx 재시작
+
+```
+# service nginx restart
+```
+
+이제 톰캣을 실행합니다.
+
+```
+# cd CATALINA_HOME/bin
+# ./startup.sh
 ```
 
 그럼 이제 다시 `http://localhost` 에 접근하면 `tomcat home`이 표시됩니다.
@@ -75,8 +96,9 @@ daemon off;
 
 ```
 FROM nurinamu:gdg:basic
+ENV PATH /path/to/tomcat9/bin
 EXPOSE 80
-CMD ["nginx"]
+CMD startup.sh && nginx
 ```
 
 위와 같이 저장하고 아래 명령으로 build 합니다.
@@ -85,9 +107,9 @@ CMD ["nginx"]
 $ docker build . -t nurinamu/gdg:local
 ```
 
-그러면 `nurinamu/gdg:locale` 이미지가 만들어지게 됩니다.
+그러면 `nurinamu/gdg:local` 이미지가 만들어지게 됩니다.
 
-해당 이미지를 실행하면 브라우저를 통해 `http:localhost`에서 웰컴페이지를 볼 수 있습니다.
+해당 이미지를 실행하면 브라우저를 통해 `http:localhost`에서 톰캣 웰컴페이지를 볼 수 있습니다.
 
 ```
 #이미지 실행
