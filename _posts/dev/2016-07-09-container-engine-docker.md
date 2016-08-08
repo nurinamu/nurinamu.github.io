@@ -1,12 +1,12 @@
 ---
-title : Google Container Engine으로 서버 환경 구축해보기 #1
+title : Google Container Engine으로 서버 환경 구축해보기 1편
 layout : default
 category : dev
-tags : gce, gcp, docker, container engine
+tags : gce, gcp, docker, container engine, gke
 description : Docker로 WAS환경을 구축해서 Google Container Engine을 써서 배포해보자.
 ---
 
-# Google Container Engine으로 서버 환경 구축해보기 #1
+# Google Container Engine으로 서버 환경 구축해보기 1편
 
 GDG 모임에서 이런저런 이야기나오다가 토이프로젝트를 해보자는 말에 그동안 미뤄왔던 Docker와 Java8 관련 코딩을 한번 해보자는 생각에 시작해봅니다.
 
