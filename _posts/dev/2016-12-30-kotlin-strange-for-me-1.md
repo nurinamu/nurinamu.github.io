@@ -19,6 +19,7 @@ Kotlin 코드를 보면서 생소한 Type들에 대해 모아봤습니다.
 
 
 - [Unit-retruning functions](https://kotlinlang.org/docs/reference/functions.html#unit-returning-functions)
+
 ```kotlin
   fun printStr(value: String): Unit {
     println(value)
@@ -31,6 +32,7 @@ Kotlin 코드를 보면서 생소한 Type들에 대해 모아봤습니다.
   }
 ```
 - 아마도 함수 레퍼런스를 선언할때 `void` 함수의 표현을 위해 `Unit` type이 사용되어 Java의 `void`와 동일하다고 하는 것 같다.
+
 ```
 var voidFunc: () -> Void = {} //요런게 없기 때문에
 var voidFunc: () -> Unit = {} //요렇게 하는 것.
@@ -46,6 +48,7 @@ var voidFunc: () -> Unit = {} //요렇게 하는 것.
 - Javadoc 설명 : Nothing has no instances. You can use Nothing to represent "a value that never exists": for example, if a function has the return type of Nothing, it means that it never returns (always throws an exception).
 
 - 함수가 명시적으로 return이 존재하지 않는다고 표기하기위한 class. 한마디로 종료되지 않는 blocking 함수 같은 것. 이것을 종료하려면 `exception` 만이 가능
+
 ```kotlin
   //일반적인 return 값이 없는 void 함수
   fun noReturn() {
@@ -66,6 +69,7 @@ var voidFunc: () -> Unit = {} //요렇게 하는 것.
   - 말 그대로 다양한 목적으로 쓸수 있게 단순히 object에 값을 더하는 것 뿐. Pair와 Triple의 차이는 단지 그 값의 개수가 2개냐 3개냐 차이
 - 사실 이 기능은 함수 디자인이나 실제 구현시 정말 많은 편의성을 부여한다. 함수 구현시에 한 개 이상의 값을 반환하는 경우에 방법이 없어 Bean을 따로 생성했던 경험이 있는 사람이라면, 그 확장성이 더 없는 Bean class를 선언하고 getter/setter를 만들고 헀던 귀차니즘을 단박에 줄일 수 있다. Generic으로 각 값의 Type도 지정이 가능하니 거의 완벽! 이것만 봐도 Kotlin은 Java에 개발 편의성을 많이 고민했단 생각이 든다. 정말 개발자 친화적이야. 개인적으로 이 Type은 완소!
 - [Lombok](https://projectlombok.org/)은 어차피 kotlin의 data class와 마찬가지이니 단순 getter/setter줄이는 것 이외에도 장점이 많다.
+
 ```java
   //Java
   public Profile getProfile() {
