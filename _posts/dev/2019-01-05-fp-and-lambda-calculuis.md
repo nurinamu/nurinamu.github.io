@@ -45,7 +45,13 @@ x가 우리가 생각했던 것 처럼 하나의 값이 아닌 함수인 경우�
 그래서 다시 아래 처럼 만들어질 수 있겠다.
 
 ```
-fun f(x: (Int) -> Int) = x + 1
+fun f(x: (Int) -> Int) : (Int) -> Int = { x(it) + 1 }
+
+fun xfunc(z: Int) = 2 * z
+
+fun main(args: Array<String>) {
+    println(f(::xfunc)(2)) //5
+}
 ```
 
 위의 것도 상황에 따라다를 수 있으니 일단 코드가 맞고 틀리고 보다는 어떻게 하는 것이 함수형 스럽게 만드는 것인지 이해하는데 집중하자.
