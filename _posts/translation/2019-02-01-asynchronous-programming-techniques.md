@@ -8,10 +8,10 @@ description : kotlin 코루틴에 대한 좀 더 정확한 이해와 학습을 �
 
 # 비동기 프로그래밍 테크닉 (Asynchronous Programming Techniques)
 
-> #### 번역
+>#### 번역
 해당 번역은 정식 번역이 아닌 학습을 위한 개인 번역입니다. 참고 부탁드립니다. **nurinamu**
 
-원문 [Asynchronous Programming Techniques](http://kotlinlang.org/docs/tutorials/coroutines/async-programming.html)
+#### 원문 [Asynchronous Programming Techniques](http://kotlinlang.org/docs/tutorials/coroutines/async-programming.html)
 
 이 튜토리얼은 비동기 프로그래밍의 다른 접근 방법을 설명한다.
 
@@ -51,7 +51,7 @@ fun preparePost(): Token {
 - 항상 가능한 것이 아니다. 자바스크립트 같은 몇몇 플랫폼에서는 쓰레드를 지원조차 하지 않는다. 
 - 쉽지가 않다. 경쟁 상황을 피하기 위한 쓰레드들을 디버깅 하는 것은 멀티 쓰레드 프로그램에서 자주 겪는 힘든 일이다.
 
-###Callbacks
+### Callbacks
 
 콜백(callbacks)은 하나의 함수를 다른 함수로 파라미터로 전달하는 것이다. 이것은 완료시점에 한번만 호출된다.
 
@@ -78,7 +78,7 @@ fun preparePostAsync(callback: (Token) -> Unit) {
 
 콜백은 자바스크립트와 같은 이벤트 루프 아키텍쳐에서는 매우 일반적인 것이다. 하지만 자바스크립트에서 조차도 보통 프로미스나 리액티브 익스텐션 같은 다른 접근 법을 사용하려고 옮겨간다.
 
-###Futures, Promises 등과 나머지
+### Futures, Promises 등과 나머지
 
 futures나 promises(언어/플랫폼에 따라 불리우는 다른 단어들도 있다)의 아이디어 배경은 호출했을 때, 특정 시점에 Promise로 불리는 처리가능한 객체를 반환하게다고 보장하는 것이다.
 
@@ -110,7 +110,7 @@ fun preparePostAsync(): Promise<Token> {
 
 - 오류 처리가 복잡해질 것이다. 애러의 전파와 처리가 항상 직접적이지가 않다.
 
-###Reactive Extensions
+### Reactive Extensions
 
 리덱티브 익세텐션(Rx)는 [Erik Meijer](https://en.wikipedia.org/wiki/Erik_Meijer_(computer_scientist))에 의해 C#에서 소개되었다. 한동안 .NET 플랫폼 에서만 사용되어지고, Netflix가 RxJava라는 이름으로 Java에 포팅하기 전까지는 딱히 주류가 되지는 않았었다. 이후 자바스크립트 - RxJS 를 포함하여 다양한 플랫폼을 위해 여러 경로들이 제공되어졌다.
 
@@ -124,7 +124,7 @@ Rx의 아이디어 배경은 데이터를 이제는 `스트림`(무한한 양의
 
 게다가, Rx는 애러 핸들링에 대한 좋은 접근을 소개한다.
 
-###Coroutines
+### Coroutines
 
 비동기 코드를 작성하기 위한 코틀린의 접근은 연기 가능한(suspendable) 연산들의 아이디어(함수가 특정 포인트에서 실행을 연기할 수 있고 이후 다시 실행할 수 있는 아이디어)인 코루틴을 사용하는 것이다. 
 
