@@ -3,8 +3,7 @@ title : WebFlux 알아보기
 layout : default
 category : dev
 tags : webflux, async, functional, reactive
-description : functional programming에 관심을 가지게되어 자연스럽게 Reactive programming에도 관심을 가지게되었고 서버개발자로써 결국 Webflux에 왔다.
-WebFlux가 어떤 방식으로 동작하는 것이고 기존의 Servlet 방식보다 좋은 점은 무엇인지 공부할거다.
+description : functional programming에 관심을 가지게되어 자연스럽게 Reactive programming에도 관심을 가지게되었고 서버개발자로써 결국 Webflux에 왔다. WebFlux가 어떤 방식으로 동작하는 것이고 기존의 Servlet 방식보다 좋은 점은 무엇인지 공부할거다.
 ---
 
 ### WebFlux???
