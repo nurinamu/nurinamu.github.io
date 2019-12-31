@@ -7,7 +7,7 @@ description : 2019년 첫 참석한 KotlinConf에 대한 후기를 남겨봅니�
 
 ## KotlinConf 2019 Copenhagen 되돌아보기
 
-작년 겨울 지인을 통해서 알게된 KotlinConf. 호기심으로 신청해서 참석한 이번 행사의 후기를 남겨보자. Kotlin에 대한 애정(?)을 더욱 키워주고 흥미로운 내용들이 많았다. 참관기를 크게 내가 배운 내용들과 행사에서 느낀 분위기들. 그리고 꼭 다른 분들에게 전달해주고 싶었던 나의 생각들 정도로 나누어서 줄줄이 써보자. 세션의 주제별로 정리는 따로 글을 남기겠다.
+작년 겨울 지인을 통해서 알게된 [KotlinConf](https://kotlinconf.com/). 호기심으로 신청해서 참석한 이번 행사의 후기를 남겨보자. Kotlin에 대한 애정(?)을 더욱 키워주고 흥미로운 내용들이 많았다. 참관기를 크게 내가 배운 내용들과 행사에서 느낀 분위기들. 그리고 꼭 다른 분들에게 전달해주고 싶었던 나의 생각들 정도로 나누어서 줄줄이 써보자. 세션의 주제별로 정리는 따로 글을 남기겠다.
 
 ## 분위기
 
@@ -21,11 +21,11 @@ description : 2019년 첫 참석한 KotlinConf에 대한 후기를 남겨봅니�
 
 ### Multiplatform - Default language in everywhere
 
-Jetbrains에서 생각하는 Kotlin의 비전으로 Multiplatform을 이번 행사 내내 강조했다. Jetbrains 부스에서 진행된 Kotlin Locator라는 행사용 게임앱 역시 Kotlin Native의 샘플앱으로 iOS, Watch용을 제공했다. 여담이지만 11등을 해서 10등까지주는 RasberryPi4를 못받았다 ㅠㅠ. Kotlin이 모든 분야의 Default Language가 된다면 한 분야에서 Kotlin에 익숙해진 개발자는 다른 분야의 접근시 언어 습득의 장벽을 최소화하고 코드 리딩의 어려움을 줄여줄 수 있다. 거기에 한프로젝트안에 포함된 여러 platform에서 모든 코드부분을 공유할 수는 없겠지만, 비즈로직을 포함한 라이브러리를 공유하는 방식도 가능해진다. Jetbrains가 원하는 Kotlin의 미래는 요런 상황인 것 같다. 그래서 Jetbrains는 이 비전 달성의 로드맵에 중요한 요소로 개발자 생태계를 꼽았다. 많은 사용이 있는 것이 좋은 것이고, 좋은 것은 많이 사용할 것이라는 선순환을 만들기 위해 모든 채널로 Kotlin의 홍보와 외부 Feedback을 받을 것이라한다. Jetbrains의 Kotlin팀이 Devrel 팀과 월드투어를 한다는데 이것이 그 액션의 일환일거다. Multiplatform을 지원하는 언어의 시도는 많이 있어왔지만 실패한 역사들을 많이 봐왔다. 하지만 Android를 넘어 이제 Server side에 깊숙히 침투 했으며, Web front로 확장중이다. 그러면서 iOS도 발걸음을 때었다. 하나의 비전안에서 차곡차곡 미션을 해쳐나가는 Kotlin의 앞길이 기대되고 Kotlin이 좋은 개발자로서 잘되기를 기원하는 중이다. 
+[Jetbrains에서 생각하는 Kotlin의 비전으로 Multiplatform을 이번 행사 내내 강조했다.](https://www.youtube.com/watch?v=0xKTM0A8gdI&list=PLQ176FUIyIUY6SKGl3Cj9yeYibBuRr3Hl&index=3&t=0s) Jetbrains 부스에서 진행된 Kotlin Locator라는 행사용 게임앱 역시 Kotlin Native의 샘플앱으로 iOS, Watch용을 제공했다. 여담이지만 11등을 해서 10등까지주는 RasberryPi4를 못받았다 ㅠㅠ. Kotlin이 모든 분야의 Default Language가 된다면 한 분야에서 Kotlin에 익숙해진 개발자는 다른 분야의 접근시 언어 습득의 장벽을 최소화하고 코드 리딩의 어려움을 줄여줄 수 있다. 거기에 한프로젝트안에 포함된 여러 platform에서 모든 코드부분을 공유할 수는 없겠지만, 비즈로직을 포함한 라이브러리를 공유하는 방식도 가능해진다. Jetbrains가 원하는 Kotlin의 미래는 요런 상황인 것 같다. 그래서 Jetbrains는 이 비전 달성의 로드맵에 중요한 요소로 개발자 생태계를 꼽았다. 많은 사용이 있는 것이 좋은 것이고, 좋은 것은 많이 사용할 것이라는 선순환을 만들기 위해 모든 채널로 Kotlin의 홍보와 외부 Feedback을 받을 것이라한다. Jetbrains의 Kotlin팀이 Devrel 팀과 월드투어를 한다는데 이것이 그 액션의 일환일거다. Multiplatform을 지원하는 언어의 시도는 많이 있어왔지만 실패한 역사들을 많이 봐왔다. 하지만 Android를 넘어 이제 Server side에 깊숙히 침투 했으며, Web front로 확장중이다. 그러면서 iOS도 발걸음을 때었다. 하나의 비전안에서 차곡차곡 미션을 해쳐나가는 Kotlin의 앞길이 기대되고 Kotlin이 좋은 개발자로서 잘되기를 기원하는 중이다. 
 
 ### Coroutines - Flow
 
-이제는 Kotlin == Coroutines인 느낌이다. lightweight한 비동기 동시성 기능을 엄청 강조한다. 컨퍼런스의 세션중에 코루틴 기능 하나로 여러개의 세션이 만들어진 것만으로도 이 기술이 얼마나 관심을 받고있는 것인지 느껴진다. Reactive 개발에 대한 관심도가 높은 근래에 계속 비동기 구현을 위한 기능들이 추가되는데 기존 코루틴에서 evaluated된 값을 전달하던 코루틴용 Stream인 Channel말고 추가로 비동기 객체 전달이 가능하고 코루틴에서 사용가능한 Stream인 Flow를 내놓았다. 이제 비즈로직에 코루틴을 활용한 한층 더 강화된 비동기 프로그래밍이 가능하게 되었다. 이것의 내용은 아직 블로그에 작성완료 못한 비동기 프로그래밍 2탄과 함께 다뤄서 작성하겠다.
+이제는 [Kotlin == Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)인 느낌이다. lightweight한 비동기 동시성 기능을 엄청 강조한다. 컨퍼런스의 세션중에 코루틴 기능 하나로 여러개의 세션이 만들어진 것만으로도 이 기술이 얼마나 관심을 받고있는 것인지 느껴진다. [Reactive 개발](https://www.reactivemanifesto.org/)에 대한 관심도가 높은 근래에 계속 비동기 구현을 위한 기능들이 추가되는데 기존 코루틴에서 evaluated된 값을 전달하던 코루틴용 Stream인 [Channel](https://kotlinlang.org/docs/reference/coroutines/channels.html#channels)말고 추가로 비동기 객체 전달이 가능하고 코루틴에서 사용가능한 Stream인 [Flow](https://kotlinlang.org/docs/reference/coroutines/flow.html#asynchronous-flow)를 내놓았다. 이제 비즈로직에 코루틴을 활용한 한층 더 강화된 비동기 프로그래밍이 가능하게 되었다. 이것의 내용은 아직 블로그에 작성완료 못한 비동기 프로그래밍 2탄과 함께 다뤄서 작성하겠다.
 
 ### DSL
 
