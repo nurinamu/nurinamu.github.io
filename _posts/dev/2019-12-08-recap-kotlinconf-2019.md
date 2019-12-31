@@ -1,5 +1,5 @@
 ---
-title : Recap : KotlinConf 2019 Cophenhagen
+title : Review the KotlinConf 2019 Cophenhagen
 layout : default
 category : dev
 description : 2019년 첫 참석한 KotlinConf에 대한 후기를 남겨봅니다.
