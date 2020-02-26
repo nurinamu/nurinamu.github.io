@@ -37,7 +37,7 @@ description : 사내 프로젝트를 진행하면서 cache 갱신 부분을 coro
     - context를 제외하고는 아무것도 가진것이 없다. - 여기서 문제. 왜 CoroutineContext와 CoroutineScope 명칭을 달리 존재하는 걸까!?
     - context와 scope는 `의도하는 목적(intented purpose)`이 다르다
 
-![CoroutineScope](https://miro.medium.com/max/4596/1*zuX5Ozc2TwofXlmDajxpzg.png)
+<img src="https://miro.medium.com/max/4596/1*zuX5Ozc2TwofXlmDajxpzg.png" width="600">
 
 - coroutine은 launch함수를 통해 생성이 되는데 launch함수는 context를 가진 CoroutineScope의 extension 함수로 제공된다. 그리고 launch는 CoroutineContext를 parameter로 넘겨 받는다 결국 launch함수를 통해 두개의 CoroutineContext를 핸들링하게 되는데 그 이유는 새로 생성되는 Job(=coroutine)에 child context를 전달해주기 위함이다.
     - 내가 그래서 context와 scope의 이해하기로는 scope은 본인이 가지고 있는 하나의 context가 영향을 주는 범위를 한정하기 위해 정의된 것으로 보인다. launch함수 호출시 새로운 context 첨부하지 않으면 EmptyCoroutineContext가 기본으로 설정되는데 그말은 새로운 CoroutineContext추가 없이 현재 launch함수의 scope에서 해당 coroutine을 수행하겠다는 뜻이된다. 
