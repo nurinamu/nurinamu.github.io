@@ -6,7 +6,7 @@ tags : jekyll
 description : 사내 프로젝트를 진행하면서 cache 갱신 부분을 coroutine을 통한 비동기 동시 처리를 하고 싶었는데 coroutine의 동작이 생각했던 방향과 차이가 좀 있어서 이유를 확인하려고보니 CoroutineContext와 Scope에 대한 이해가 좀 부족한 것 같아 이부분에 대한 이해가 좀 더 명쾌해지도록 공부하고 기록합니다.
 ---
 
-# CoroutineScope, CoroutineText, Job
+## CoroutineScope, CoroutineText, Job 공부해보자
 
 사내 프로젝트를 진행하면서 cache 갱신 부분을 coroutine을 통한 비동기 동시 처리를 하고 싶었는데 coroutine의 동작이 생각했던 방향과 차이가 좀 있어서 이유를 확인하려고보니 CoroutineContext와 Scope에 대한 이해가 좀 부족한 것 같아 이부분에 대한 이해가 좀 더 명쾌해지도록 공부하고 기록합니다.
 
