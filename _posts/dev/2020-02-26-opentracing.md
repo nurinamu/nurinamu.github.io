@@ -16,7 +16,7 @@ description : 이제는 대부분 서비스들에게 분산 인프라 환경이 
 
 ### OpenTracing이란
 
-이 공유에서 언급될 [OpenTracing](https://opentracing.io/)은 [CNCF](https://www.cncf.io/) 산하의 프로젝트로 단어 그자체 처럼 하나의 흐름을 공개적으로 추적하기 위한 기능을 표준화하는 프로젝트입니다. 아직 공식적인 OpenTracing의 표준은 존재하지 않고 CNCF가 가장 큰 기구이기 떄문에 Cloud환경의 입김(question)이 쎄서 주목받는 비공인 표준 입니다. 현재 해당 OpenTracing spec을 [기준으로 만들어지는 Tracer들](https://opentracing.io/docs/supported-tracers/)로는 Zipkin, Jaeger, Lightstep등 다양하게 존재합니다. (CNCF사이트 supported tracer목록에 zipkin이 빠져있는건 왜 그런지 궁금하네요)
+이 공유에서 언급될 [OpenTracing](https://opentracing.io/)은 [CNCF](https://www.cncf.io/) 산하의 프로젝트로 단어 그자체 처럼 하나의 흐름을 공개적으로 추적하기 위한 기능을 표준화하는 프로젝트입니다. 아직 공식적인 OpenTracing의 표준은 존재하지 않고 CNCF가 가장 큰 기구이기 떄문에 Cloud환경의 입김(question)이 쎄서 주목받는 비공인 표준 입니다. 현재 해당 OpenTracing spec을 [기준으로 만들어지는 Tracer들](https://opentracing.io/docs/supported-tracers/)로는 [Zipkin](https://zipkin.io/), [Jaeger](https://www.jaegertracing.io/), [Lightstep](https://lightstep.com/)등 다양하게 존재합니다. (CNCF사이트 supported tracer목록에 zipkin이 빠져있는건 왜 그런지 궁금하네요)
 
 이제는 서비스를 운영하는 대부분의 서버 개발자들에게 MSA가 보편화되고 여러 효율성 관점에서 도입되고 있을 때, 이런 분산 환경의 로깅이 주목을 받으며 OpenTracing이 그 방안으로 나오고 있습니다. 사실 OpenTracing은 분산 환경의 로깅을 목적으로 만들어진 것이 아니고 하나의 request에서 response를 반환 할 때까지 거치는 서버의 연결 점들을 추적하기 위한 시스템으로 시작된 것이었습니다. 이 서버 연결을 추적하다보니 자연스럽게 해당 서버들의 req/res latency를 확인할 수 있게되어 bottleneck check가 가능하게 되고 그 서버 안의 로그까지 합쳐져 코드레벨의 디버깅도 할 수 있는 기능들도 들어가게되었습니다. 
 
