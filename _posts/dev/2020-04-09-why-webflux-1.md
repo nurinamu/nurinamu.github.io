@@ -1,5 +1,5 @@
 ---
-title : Webflux 공부하자 #1
+title : Webflux 공부하자 1편
 layout : default
 category : dev
 tags : webflux, async, functional, reactive, reactor, reactive-stream
